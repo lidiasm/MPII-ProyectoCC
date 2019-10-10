@@ -2,3 +2,7 @@
 *.pdf
 *.odt
 *.txt
+
+# Python
+*.py[cod]
+*$py.class
