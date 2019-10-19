@@ -23,7 +23,7 @@ Los datos que se utilizarán en este proyecto se obtienen de la **API Petfinder*
 #### Arquitectura. <a name="id2"></a>
 
 Tras la búsqueda de información acerca de las arquitecturas existentes he decidido que este proyecto se basará en una **arquitectura de microservicios**. Su razón de ser se fundamenta en las diversas ventajas que presenta tales como la posibilidad de desarrollar los diversos microservicios de forma independiente así como su mantenimiento, depuración y actualización. Además permite desarrollar microservicios adicionales con el fin de ampliar las funcionalidades del sistema.
-[Más información acerca de la arquitectura y microservicios.]()
+[Más información acerca de la arquitectura y microservicios.](https://github.com/lidiasm/ProyectoCC/blob/master/documentacion/ampliacion_arquitectura.md)
 
 #### Microservicios. <a name="id3"></a>
 
