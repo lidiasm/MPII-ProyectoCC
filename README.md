@@ -11,7 +11,7 @@
 
 #### Descripción del proyecto. <a name="id1"></a>
 
-El proyecto de esta asignatura consiste en desarrollar un sistema informático que facilite la adopción de las diferentes especies de animales domésticas. Con este fin se incluirá un servicio de registro de usuarios para que estos puedan especificar sus necesidades y gustos de modo que el sistema sea capaz de sugerirles las posibles mascotas que puedan adaptarse a su ritmo de vida. Asimismo este software será capaz de analizar y generar un conjunto de datos estadísticos cuya utilidad consiste en poder resolver las cuestiones principales que se plantean en el tema de las adopciones. Algunos ejemplos son:
+El proyecto de esta asignatura consiste en desarrollar un sistema informático que facilite la adopción de las diferentes especies de animales domésticas. Con este fin nuestro sistema será capaz de realizar recomendaciones personalizadas en función de las preferencias y necesidades especificadas. De este modo podrá sugerir posibles mascotas que puedan adaptarse al ritmo de vida de cada usuario en particular. Asimismo este software será capaz de analizar y generar un conjunto de datos estadísticos cuya utilidad consiste en poder resolver las cuestiones principales que se plantean en el tema de las adopciones. Algunos ejemplos son:
 
 - Analizar las características de aquellas razas que se encuentran en mayor medida en estos centros de adopción.
 - Comprobar cuáles son las especies que tienen un mejor comportamiento con niños así como con otras especies de animales.
