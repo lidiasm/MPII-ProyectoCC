@@ -1,0 +1,22 @@
+#### Microservicios. <a name="id3"></a>
+
+1.  Un primer microservicio destinado a la recopilación y procesamiento de los datos recopilados de la API Petfinder. Esta API trabaja principalmente con ficheros *JSON* por lo que será en este formato en el que se encuentren los datos recopilados. De entre todos ellos solo obtendremos aquellos que sean necesarios para generar las estadísticas y realizar las búsquedas personalizadas.
+
+2. Un segundo microservicio que realice un análisis de los datos recopilados y genere estadísticas que sean útiles para comprender los diversos factores que influyen en un proceso de adopción.
+
+3. Un tercer microservicio capaz de almacenar los informes estadísticos generados en su base de datos.
+
+4. Un microservicio capaz de realizar búsquedas en la base de datos en función de un conjunto de criterios especificados. De este modo se generarán las recomendaciones personalizadas con el objetivo de proponer animales afines a la personalidad de los usuarios. 
+
+Asimismo cada microservicio dispondrá de su propia base de datos ya sea para solo almacenar datos relativos a la caché de este, como es el caso del que recopila datos de la API Petfinder, o el microservicio encargado de realizar las búsquedas de mascotas en base a preferencias. Del mismo modo el microservicio que genera los datos estadísticos también será responsable de una base de datos particular para almacenar las estadísticas que vaya extrayendo de los datos recopilados.
+
+Si bien este proyecto no cuenta con muchos microservicios con el objetivo de que pueda ampliarse en un futuro se hará uso de una [***API Gateway***](https://tyk.io/microservices-api-gateway/) con el fin de establecer una única entrada. Su uso conlleva diferentes ventajas como la posibilidad de añadir y modificar microservicios sin provocar ningún impacto negativo en las aplicaciones cliente que los utilicen, así como ocultar los detalles de implementación de estos. Además al incoporar una API Gateway solo a través de ella se podrán realizar peticiones a los microservicios a los que esté conectada prorpocionando así una única entrada más segura y controlada.
+En el caso particular de mi proyecto los microservicios que estarán conectados con ella serán los relacionados con la búsqueda de mascotas y con la generación de datos estadísticos. 
+A continuación se presenta el esquema de comunicación de los microservicios detallados anteriormente así como la arquitectura que se ha definido al comienzo.
+
+![Esquema representativo de la arquitectura.](https://github.com/lidiasm/ProyectoCC/blob/master/documentacion/imagenes/Comunicaci%C3%B3n%20microservicios.png)
+
+Como medio de comunicación entre los microservicios así como entre la API Gateway y los dos microservicios que se conectarán a ella se implementarán diversas [***API REST***](https://searchapparchitecture.techtarget.com/definition/RESTful-API), tal y como se puede comprobar en el esquema anterior. La principal razón del desarrollo de una API REST se fundamenta en que se encuentra entre una de las tecnologías más utilizadas para la gestión de peticiones a un servidor cuando se diseña un servicio web. Asimismo está caracterizada por su sencillez en relación al uso del protocolo *HTTP* puesto que con los cuatro verbos disponibles se pueden realizar diversas operaciones de gran relevancia. En este proyecto, por ejemplo, se podría utilizar el verbo *GET* para obtener los resultados estadísticos.
+
+Para finalizar se integrarán dos servicios en este proyecto a los que se conectarán todos los microservicios. Un servicio *LOG* cuyo objetivo será monitorizar el sistema almacenando los registros de las acciones que se realizan en cada uno de los microservicios con el fin de analizar qué está ocurriendo en el sistema en cada momento así como detectar los posibles errores que surjan. 
+El segundo servicio estará destinado al almacenamiento de todos los archivos de configuración relevantes. Su principal objetivo es centralizar en un único sistema distribuido toda la información necesaria para que los microservicios puedan comunicarse, por ejemplo, con sus respectivas bases de datos.
