@@ -14,7 +14,7 @@ Si bien este proyecto no cuenta con muchos microservicios con el objetivo de que
 En el caso particular de mi proyecto los microservicios que estarán conectados con ella serán los relacionados con la búsqueda de mascotas y con la generación de datos estadísticos. 
 A continuación se presenta el esquema de comunicación de los microservicios detallados anteriormente así como la arquitectura que se ha definido al comienzo.
 
-![Esquema representativo de la arquitectura.](https://github.com/lidiasm/ProyectoCC/blob/master/documentacion/imagenes/Comunicación microservicios.png)
+![Esquema representativo de la arquitectura.](https://github.com/lidiasm/ProyectoCC/blob/master/docs/imgs/Comunicacion%20microservicios.png)
 
 Como medio de comunicación entre los microservicios así como entre la API Gateway y los dos microservicios que se conectarán a ella se implementarán diversas [***API REST***](https://searchapparchitecture.techtarget.com/definition/RESTful-API), tal y como se puede comprobar en el esquema anterior. La principal razón del desarrollo de una API REST se fundamenta en que se encuentra entre una de las tecnologías más utilizadas para la gestión de peticiones a un servidor cuando se diseña un servicio web. Asimismo está caracterizada por su sencillez en relación al uso del protocolo *HTTP* puesto que con los cuatro verbos disponibles se pueden realizar diversas operaciones de gran relevancia. En este proyecto, por ejemplo, se podría utilizar el verbo *GET* para obtener los resultados estadísticos.
 
