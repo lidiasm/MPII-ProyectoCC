@@ -2,7 +2,7 @@
 
 1.  Un primer microservicio destinado a la recopilación y procesamiento de los datos recopilados de la API Petfinder. Esta API trabaja principalmente con ficheros *JSON* por lo que será en este formato en el que se encuentren los datos recopilados. De entre todos ellos solo obtendremos aquellos que sean necesarios para generar las estadísticas y realizar las búsquedas personalizadas, tales como el nombre, el tipo de animal, la raza, el tamaño, el género, la edad, el tipo de pelaje, el estado (encontrado, adoptable o adoptado) y si es capaz de relacionarse con niños, gatos y perros.
 
-2. Un segundo microservicio que realice un análisis de los datos recopilados y genere estadísticas que sean útiles para comprender los diversos factores que influyen en un proceso de adopción. Para ello se realizarán informes estadísticos relacionados con seis estudios concretos, los cuales han sido explicados junto con las [entidades del proyecto]().
+2. Un segundo microservicio que realice un análisis de los datos recopilados y genere estadísticas que sean útiles para comprender los diversos factores que influyen en un proceso de adopción. Para ello se realizarán informes estadísticos relacionados con seis estudios concretos, los cuales han sido explicados junto con las [entidades del proyecto](https://github.com/lidiasm/ProyectoCC/blob/master/docs/entidades.md).
 
 3. Un tercer microservicio capaz de almacenar los informes estadísticos generados en su base de datos.
 
@@ -14,7 +14,7 @@ Si bien este proyecto no cuenta con muchos microservicios con el objetivo de que
 En el caso particular de mi proyecto los microservicios que estarán conectados con ella serán los relacionados con la búsqueda de mascotas y con la generación de datos estadísticos. 
 A continuación se presenta el esquema de comunicación de los microservicios detallados anteriormente así como la arquitectura que se ha definido al comienzo.
 
-![Esquema representativo de la arquitectura.](https://github.com/lidiasm/ProyectoCC/blob/master/documentacion/imagenes/Comunicaci%C3%B3n%20microservicios.png)
+![Esquema representativo de la arquitectura.](https://github.com/lidiasm/ProyectoCC/blob/master/documentacion/imagenes/Comunicación microservicios.png)
 
 Como medio de comunicación entre los microservicios así como entre la API Gateway y los dos microservicios que se conectarán a ella se implementarán diversas [***API REST***](https://searchapparchitecture.techtarget.com/definition/RESTful-API), tal y como se puede comprobar en el esquema anterior. La principal razón del desarrollo de una API REST se fundamenta en que se encuentra entre una de las tecnologías más utilizadas para la gestión de peticiones a un servidor cuando se diseña un servicio web. Asimismo está caracterizada por su sencillez en relación al uso del protocolo *HTTP* puesto que con los cuatro verbos disponibles se pueden realizar diversas operaciones de gran relevancia. En este proyecto, por ejemplo, se podría utilizar el verbo *GET* para obtener los resultados estadísticos.
 
