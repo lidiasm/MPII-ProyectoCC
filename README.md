@@ -8,18 +8,13 @@
 - [Microservicios.](#id3)
 - [Lenguajes de programación y frameworks.](#id4)
 - [Servicios LOG y de configuración distribuida.](#id5)
-- [Directorio que contiene toda la documentación del proyecto.](https://github.com/lidiasm/ProyectoCC/tree/master/documentacion)
+- [Directorio que contiene toda la documentación del proyecto.](https://github.com/lidiasm/ProyectoCC/tree/master/docs)
 
 #### Descripción del proyecto. <a name="id1"></a>
 
-El proyecto de esta asignatura consiste en desarrollar un sistema informático que facilite la adopción de las diferentes especies de animales domésticas. Con este fin nuestro sistema será capaz de realizar recomendaciones personalizadas en función de las preferencias y necesidades especificadas. De este modo podrá sugerir posibles mascotas que puedan adaptarse al ritmo de vida de cada usuario en particular. Asimismo este software será capaz de analizar y generar un conjunto de datos estadísticos cuya utilidad consiste en poder resolver las cuestiones principales que se plantean en el tema de las adopciones. Algunos ejemplos son:
-
-- Analizar las características de aquellas razas que se encuentran en mayor medida en estos centros de adopción.
-- Comprobar cuáles son las especies que tienen un mejor comportamiento con niños así como con otras especies de animales.
-- Las ciudades con un mayor número de animales en adopción.
-- Las localizaciones donde se encuentran las mayores concentraciones de centros de adopción.
-
+El proyecto de esta asignatura consiste en desarrollar un sistema informático que facilite la adopción de las diferentes especies de animales domésticas. Con este fin nuestro sistema será capaz de realizar recomendaciones personalizadas en función de las preferencias y necesidades especificadas. De este modo podrá sugerir posibles mascotas que puedan adaptarse al ritmo de vida de cada usuario en particular. Asimismo este software será capaz de analizar y generar un conjunto de datos estadísticos cuya utilidad consiste en poder resolver las cuestiones principales que se plantean en el tema de las adopciones. 
 Los datos que se utilizarán en este proyecto se obtienen de la **API Petfinder**. Sus numerosas ventajas, tales como que cuenta con un almacenamiento masivo de datos además de que ha sido partícipe en [diferentes competiciones relacionadas con el ámbito de la Inteligencia Artificial](https://www.linkedin.com/pulse/kaggle-competition-multi-class-classification-image-alexandra), la convierten en una buena opción para usarla en este proyecto.
+[Más información acerca de las entidades y sus respectivas funcionalidades.]
 
 #### Arquitectura. <a name="id2"></a>
 
@@ -35,19 +30,15 @@ Tras la búsqueda de información acerca de las arquitecturas existentes he deci
 
 4. Un microservicio capaz de realizar búsquedas en la base de datos en función de un conjunto de criterios especificados. De este modo se generarán las recomendaciones personalizadas con el objetivo de proponer animales afines a la personalidad de los usuarios. 
 
-![Esquema representativo de la arquitectura.](https://github.com/lidiasm/ProyectoCC/blob/master/documentacion/imagenes/Comunicaci%C3%B3n%20microservicios.png)
+![Esquema representativo de la arquitectura.](https://github.com/lidiasm/ProyectoCC/blob/master/docs/imgs/Comunicaci%C3%B3n%20microservicios.png)
 
-[Más información acerca de los microservicios.](https://github.com/lidiasm/ProyectoCC/blob/master/documentacion/ampliacion_microservicios.md)
+[Más información acerca de los microservicios.](https://github.com/lidiasm/ProyectoCC/blob/master/docs/ampliacion_microservicios.md)
 
 #### Lenguajes de programación y frameworks. <a name="id4"></a>
 
-Los microservicios se implementarán en **Python** debido a sus múltiples [ventajas](https://www.invensis.net/blog/it/benefits-of-python-over-other-programming-languages/). Algunas de ellas son las siguientes:
-* Su velocidad en ejecución le posiciona como uno de los lenguajes más recomendados para desarrollar aplicaciones de red complejas o que necesiten realizar cálculos computacionales costosos.
-* Este lenguaje se desarrolla bajo una licencia de código abierto verificada por la OSI y está respaldado por una comunidad que cada vez es más amplia.
-* Cuenta con *Python Package Index (PyPI)* que dispone de diversos módulos con el objetivo de hacer que Python sea compatible con la mayoría de lenguajes así como con diversas plataformas.
-* Y, por último, una de sus ventajas por la que es más conocido hace referencia al amplio conjunto de librerías disponibles relacionadas con diversos ámbitos como la minería de datos.
+Los microservicios se implementarán en **Python** debido a sus múltiples [ventajas](https://www.invensis.net/blog/it/benefits-of-python-over-other-programming-languages/).
 
-Existe una librería en particular denominada [***Pandas***](https://pandas.pydata.org/) que resulta súmamente útil en este proyecto. La razón de ello es que cuenta con un conjunto de métodos capaces de convertir los datos recopilados de la API Petfinder, que se encuentran en formato *JSON*, a un diccionario sencillo de manipular para analizar los datos.
+Existe una librería en particular denominada [***Pandas***](https://pandas.pydata.org/) que resulta sumamente útil en este proyecto. La razón de ello es que cuenta con un conjunto de métodos capaces de convertir los datos recopilados de la API Petfinder, que se encuentran en formato *JSON*, a un diccionario sencillo de manipular para analizar los datos.
 Del mismo modo necesitaremos integrar la biblioteca [***Celery***](http://www.celeryproject.org/) con el fin de ejecutar periódicamente los microservicios encargados de recopilar los datos y de generar las estadísticas. De este modo se podrá disponer de información actualizada para generar nuevos informes estadísticos con los que completar el estudio de los factores influyentes en un proceso de adopción. Para la comunicación de los microservicios que se encuentren en este servidor de tareas se utilizará el *broker* de mensajería [***RabbitMQ***](https://www.rabbitmq.com/) que además de ser de código abierto implementa el protocolo *AMQP*, el cual garantiza la recepción de los mensajes enviados. A través de este *broker* se comunicará el microservicio que genera las estadísticas con el que recopila los datos para poder obtener la información de las mascotas con la que generar los informes estadísticos. Asimismo también será necesario establecer una comunicación entre el microservicio que obtiene los datos de la API Petfinder y el que realiza la búsqueda de mascotas. Por último se ha introducido un nuevo microservicio *Estadísticas* cuyo papel es el de ser el intermediario que recoge los informes estadísticos generados mediante *RabbitMQ*, los almacena en su base de datos y los recupera para que la API Gateway se los muestre al usuario.
 
 Con el objetivo de integrar una API Gateway en mi sistema y tras analizar las diversas alternativas que existen tales como AWS API Gateway, WSO2, Apigee API Management, entre otras he decidido escoger la [***Kong API Gateway***](https://konghq.com/solutions/gateway/). Es una API *open source* caracterizada, principalmente, por su variedad de [complementos](https://luarocks.org/search?q=kong) que pueden añadirse en tiempo de ejecución y configurarse mediante la API RESTful de administración. Asimismo cuenta con otras numerosas [ventajas](https://www.itdo.com/blog/kong-como-alternativa-open-source-de-api-gateway/) como que es multiplataforma, puede ejecutarse tanto en la nube como en entornos locales y es capaz de adaptarse a varios tipos de arquitecturas incluyendo la arquitectura basada en microservicios.
