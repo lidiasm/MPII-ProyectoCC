@@ -1,5 +1,9 @@
 ## Proyecto de Cloud Computing 2019-2020.
 
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Build Status](https://travis-ci.org/lidiasm/ProyectoCC.svg?branch=master)](https://travis-ci.org/lidiasm/ProyectoCC/)
+[![Coverage](https://codecov.io/gh/lidiasm/ProyectoCC/branch/master/graphs/badge.svg)](https://codecov.io/gh/lidiasm/ProyectoCC)
+
 ### Máster en Ingeniería Informática en la Universidad de Granada.
 
 **Índice de contenidos.**
