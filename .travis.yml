@@ -1,8 +1,11 @@
 language: python
 python: 
+    -"2.0"
+    -"2.7"
+    - "3.0"
+    - "3.4"
     - "3.5"
     - "3.6"
-    - "3.6.8"
     - "3.7"
 before_install:
   - make install
