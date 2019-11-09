@@ -3,7 +3,10 @@ python:
     - "3.4"
     - "3.5"
     - "3.6"
+    - "3.6.8"
     - "3.7"
+    - "3.8"
+    - "3.8-dev"
 before_install:
   - make install
   - pipenv install --three
