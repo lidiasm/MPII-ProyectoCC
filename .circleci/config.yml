@@ -6,12 +6,14 @@ jobs:
     steps:
       - checkout
       - run:
-        name: Instalar dependencias
-        command: |
-          pipenv install --three
-          pipenv run pip install -r requirements.txt
+          name: Instalar un entorno virtual con python3
+          command: pipenv install --three
       - run:
-        name: Ejecutar tests
-        command: |
-          pipenv run python -m pytest tests/test_mascotas.py
-          pipenv run python -m pytest --cov=mascotas tests/
+          name: Instalar dependencias
+          command: pipenv run pip install -r requirements.txt
+      - run:
+          name: Ejecutar tests
+          command: pipenv run python -m pytest tests/test_mascotas.py
+      - run:
+          name: Ejecutar test de cobertura
+          command: pipenv run python -m pytest --cov=mascotas tests/
