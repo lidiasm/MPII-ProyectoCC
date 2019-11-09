@@ -4,10 +4,9 @@ python:
     - "3.6"
     - "3.7"
 before_install:
+  - make install
   - pipenv install --three
-  - pipenv run pip install pytest
-  - pipenv run pip install pytest-cov
-  - pipenv run pip install codecov
+  - pipenv run pip install -r requirements.txt
 script: 
   - pipenv run python -m pytest tests/test_mascotas.py
   - pipenv run python -m pytest --cov=mascotas tests/

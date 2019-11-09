@@ -1,7 +1,6 @@
 install:
 	pipenv install --three
-	pipenv run pip install pytest
-	pipenv run pip install pytest-cov
+	pipenv run pip install -r requirements.txt
 
 test:
 	pipenv run python -m pytest tests/test_mascotas.py

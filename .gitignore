@@ -1,7 +1,6 @@
 # Archivos de texto
 *.pdf
 *.odt
-*.txt
 
 # Python
 *.py[cod]
