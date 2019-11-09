@@ -1,17 +1,17 @@
 version: 2
 jobs:
   build:
-    - image: circleci/python:3.6
-  steps:
-    - checkout
-    - run:
-        name: Instalar dependencias
-        command: |
-          pipenv install --three
-        	pipenv run pip install -r requirements.txt
-          
-    - run:
-        name: Ejecutar tests
-        command: |
-          pipenv run python -m pytest tests/test_mascotas.py
-        	pipenv run python -m pytest --cov=mascotas tests/
+    docker:
+      - image: circleci/python:3.6
+    steps:
+      - checkout
+      - run:
+          name: Instalar dependencias
+          command: |
+            pipenv install --three
+          	pipenv run pip install -r requirements.txt
+      - run:
+          name: Ejecutar tests
+          command: |
+            pipenv run python -m pytest tests/test_mascotas.py
+          	pipenv run python -m pytest --cov=mascotas tests/
