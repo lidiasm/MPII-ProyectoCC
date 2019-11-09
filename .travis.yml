@@ -10,6 +10,6 @@ before_install:
   - pipenv run pip install codecov
 script: 
   - pipenv run python -m pytest tests/test_mascotas.py
-  - pipenv run python -m pytest --cov=estacion tests/
+  - pipenv run python -m pytest --cov=mascotas tests/
 after_success:
   - codecov
