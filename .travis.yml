@@ -1,0 +1,15 @@
+language: python
+python: 
+    - "3.5"
+    - "3.6"
+    - "3.7"
+before_install:
+  - pipenv install --three
+  - pipenv run pip install pytest
+  - pipenv run pip install pytest-cov
+  - pipenv run pip install codecov
+script: 
+  - pipenv run python -m pytest tests/test_mascotas.py
+  - pipenv run python -m pytest --cov=estacion tests/
+after_success:
+  - codecov
