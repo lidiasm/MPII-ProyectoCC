@@ -26,3 +26,20 @@ Los microservicios se implementarán en **Python**, se utilizará [***Celery***]
 #### Servicios LOG y de configuración distribuida.
 
 Se integrarán un servicio de *loggin* mediante la librería [***logging***](https://www.ionos.es/digitalguide/paginas-web/desarrollo-web/logging-de-python/) de Python y el servicio de configuración distribuida [***etcd***](https://etcd.io/). [Más información acerca de estos servicios.](https://github.com/lidiasm/ProyectoCC/blob/master/docs/servicios.md)
+
+#### Herramienta de construcción.
+
+    buildtool: Makefile
+
+La herramienta de construcción elegida es ***make*** puesto que presenta diversas [ventajas](http://www.chuidiang.org/clinux/herramientas/makefile.php) como la posibilidad de reunir en un solo fichero de construcción los comandos necesarios para instalar las dependencias del sistema así como generar los tests y sus respectivos informes. En mi caso particular el fichero *Makefile* incluirá las órdenes necesarias para instalar un entorno virtual con [*pipenv*](https://pipenv-fork.readthedocs.io/en/latest/) de modo que no se utilice la versión de *Python* del sistema operativo así como la instalación de las dependencias especificadas en el fichero *requirements.txt*. La primera de ellas consiste en instalar una librería de *Python* denominada [*petpy*](https://pypi.org/project/petpy/) que está orientada a facilitar el uso de la API Petfinder con el fin de obtener unos datos concretos de mascotas. Del mismo modo se instala [*pytest*](https://docs.pytest.org/en/latest/) puesto que es la librería que he utilizado para ejecutar los tests, así como *codecov* y su librería para *Python* [*pytest-cov*](https://pypi.org/project/pytest-cov/) para incluir tests de cobertura y generar sus respectivos informes.
+
+Para usar este fichero de construcción basta con realizar dos sencillos pasos:
+
+1. `make` para construir el entorno virtual e instalar las dependencias necesarias.
+2. `make test` para ejecutar los tests.
+
+#### Herramientas de integración continua.
+
+La primera herramienta de integración continua que he configurado para mi proyecto es [***Travis***](https://docs.travis-ci.com/), ya que destaca por su uso sencillo y su fácil conexión con *GitHub*. Asimismo es capaz de comprobar la compatibilidad del sistema que se desarrolla en las versiones que se le especifique. En mi caso particular, he compuesto el rango de versiones válidas para mi proyecto mediante [*tox*](https://pypi.org/project/tox/), cuyo funcionamiento reside en crear un entorno virtual por cada versión de *Python* especificada para comprobar la compatibilidad del sistema desarrollado con cada una de las versiones de este lenguaje. Para mi proyecto la **versión mínima es la 3.4 y la máxima es la 3.8**, incluyendo la versión de desarrollo.
+
+Como segunda herramienta de integración continua he elegido [***CircleCI***](https://circleci.com/) por diversas razones, entre ellas destaca la facilidad para conectarla con *GitHub* así como para especificar su fichero de configuración *yml*, la rapidez con la que ejecuta los tests y proporciona los resultados, además del soporte para el lenguaje *Python* con el que estoy desarrollando el proyecto.  
