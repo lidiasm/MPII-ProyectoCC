@@ -14,50 +14,70 @@ class Mascotas:
     def __init__(self):
         self.mascotas = []
     
+    def comprobar_variable(self, variable, tipo):
+        if (variable == None or isinstance(variable, tipo) == False): return True
+        return False
+    
     # Analiza y añade los datos de una nueva mascota al vector de mascotas.
     # Los datos que no sean válidos se sustituirán por 'DNV' (Dato No Válido).
     def aniadir_nueva_mascota(self, nueva_mascota):
         datos_no_validos = 0
-        if (nueva_mascota.nombre == None or isinstance(nueva_mascota.nombre, str) == False): 
+        check_nombre = self.comprobar_variable(nueva_mascota.nombre, str)
+        if (check_nombre) :
+            nueva_mascota.nombre = "DNV"
             datos_no_validos += 1
-            nueva_mascota.nombre = "DNV" 
-        if (nueva_mascota.tipo_animal == None or isinstance(nueva_mascota.tipo_animal, str) == False):
+        check_tipo_animal = self.comprobar_variable(nueva_mascota.tipo_animal, str)
+        if (check_tipo_animal) :
+            nueva_mascota.tipo_animal = "DNV"
             datos_no_validos += 1
-            nueva_mascota.tipo_animal = "DNV" 
-        if (nueva_mascota.raza == None or isinstance(nueva_mascota.raza, str) == False):
-            datos_no_validos+=1
+        check_raza = self.comprobar_variable(nueva_mascota.raza, str)
+        if (check_raza) :
             nueva_mascota.raza = "DNV"
-        if (nueva_mascota.tamanio == None or isinstance(nueva_mascota.tamanio, str) == False): 
-            datos_no_validos+=1
-            nueva_mascota.tamanio = "DNV" 
-        if (nueva_mascota.genero == None or isinstance(nueva_mascota.genero, str) == False): 
-            datos_no_validos+=1
-            nueva_mascota.genero = "DNV" 
-        if (nueva_mascota.edad == None or isinstance(nueva_mascota.edad, str) == False):
-            datos_no_validos+=1
+            datos_no_validos += 1
+        check_tamanio = self.comprobar_variable(nueva_mascota.tamanio, str)
+        if (check_tamanio) :
+            nueva_mascota.tamanio = "DNV"
+            datos_no_validos += 1
+        check_genero = self.comprobar_variable(nueva_mascota.genero, str)
+        if (check_genero) :
+            nueva_mascota.genero = "DNV"
+            datos_no_validos += 1
+        check_edad = self.comprobar_variable(nueva_mascota.edad, str)
+        if (check_edad) :
             nueva_mascota.edad = "DNV"
-        if (nueva_mascota.tipo_pelaje == None or isinstance(nueva_mascota.tipo_pelaje, str) == False): 
-            datos_no_validos+=1
-            nueva_mascota.tipo_pelaje = "DNV" 
-        if (nueva_mascota.estado == None or isinstance(nueva_mascota.estado, str) == False):
-            datos_no_validos+=1
+            datos_no_validos += 1
+        check_raza = self.comprobar_variable(nueva_mascota.raza, str)
+        if (check_raza) :
+            nueva_mascota.raza = "DNV"
+            datos_no_validos += 1
+        check_tipo_pelaje = self.comprobar_variable(nueva_mascota.tipo_pelaje, str)
+        if (check_tipo_pelaje) :
+            nueva_mascota.tipo_pelaje = "DNV"
+            datos_no_validos += 1
+        check_estado = self.comprobar_variable(nueva_mascota.estado, str)
+        if (check_estado) :
             nueva_mascota.estado = "DNV"
-        if (nueva_mascota.bueno_con_ninios == None or isinstance(nueva_mascota.bueno_con_ninios, bool) == False):
-            datos_no_validos+=1
+            datos_no_validos += 1
+        check_bueno_con_ninios = self.comprobar_variable(nueva_mascota.bueno_con_ninios, bool)
+        if (check_bueno_con_ninios) :
             nueva_mascota.bueno_con_ninios = "DNV"
-        if (nueva_mascota.bueno_con_gatos == None or isinstance(nueva_mascota.bueno_con_gatos, bool) == False):
-            datos_no_validos+=1
+            datos_no_validos += 1
+        check_bueno_con_gatos = self.comprobar_variable(nueva_mascota.bueno_con_gatos, bool)
+        if (check_bueno_con_gatos) :
             nueva_mascota.bueno_con_gatos = "DNV"
-        if (nueva_mascota.bueno_con_perros == None or isinstance(nueva_mascota.bueno_con_perros, bool) == False):
-            datos_no_validos+=1
+            datos_no_validos += 1
+        check_bueno_con_perros = self.comprobar_variable(nueva_mascota.bueno_con_perros, bool)
+        if (check_bueno_con_perros) :
             nueva_mascota.bueno_con_perros = "DNV"
-        if (nueva_mascota.ciudad == None or isinstance(nueva_mascota.ciudad, str) == False): 
             datos_no_validos += 1
-            nueva_mascota.ciudad = "DNV" 
-        if (nueva_mascota.pais == None or isinstance(nueva_mascota.pais, str) == False): 
+        check_ciudad = self.comprobar_variable(nueva_mascota.ciudad, str)
+        if (check_ciudad) :
+            nueva_mascota.ciudad = "DNV"
             datos_no_validos += 1
-            nueva_mascota.pais = "DNV" 
-        
+        check_pais = self.comprobar_variable(nueva_mascota.pais, str)
+        if (check_pais) :
+            nueva_mascota.pais = "DNV"
+            datos_no_validos += 1
         # Añadimos la nueva mascota con sus datos originales o modificados
         self.mascotas.append(nueva_mascota)
         if (datos_no_validos > 0): return "Algunos datos de la mascota no son válidos."
