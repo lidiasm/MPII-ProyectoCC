@@ -1,3 +1,4 @@
+petpy
 pytest
 pytest-cov
 codecov
