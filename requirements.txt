@@ -2,3 +2,4 @@ petpy
 pytest
 pytest-cov
 codecov
+gunicorn
