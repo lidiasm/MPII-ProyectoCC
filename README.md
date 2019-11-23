@@ -36,7 +36,7 @@ Se integrarán un servicio de *loggin* mediante la librería [***logging***](htt
 
 Como herramientas de integración continua se utilizarán [***Travis***](https://docs.travis-ci.com/) y [***CircleCI***](https://circleci.com/).
 
-[Más información acerca de la herramientas de construcción e integración.](https://github.com/lidiasm/ProyectoCC/blob/master/docs/herramientas_construccion_e_integracion.md)
+[Más información acerca de las herramientas de construcción e integración.](https://github.com/lidiasm/ProyectoCC/blob/master/docs/herramientas_construccion_e_integracion.md)
 
 #### Servidor Web
 
