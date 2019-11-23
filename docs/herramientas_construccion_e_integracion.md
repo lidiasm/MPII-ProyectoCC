@@ -1,0 +1,14 @@
+#### Herramienta de construcción.
+
+La herramienta de construcción elegida es ***make*** puesto que presenta diversas [ventajas](http://www.chuidiang.org/clinux/herramientas/makefile.php), como la posibilidad de reunir en un solo fichero de construcción los comandos necesarios para instalar las dependencias del sistema así como generar los tests y sus respectivos informes. En mi caso particular el fichero *Makefile* incluirá las órdenes necesarias para instalar un entorno virtual con [*pipenv*](https://pipenv-fork.readthedocs.io/en/latest/), con el objetivo de no utilizar la versión de *Python* del sistema operativo, así como la instalación de las dependencias especificadas en el fichero [*requirements.txt*](https://github.com/lidiasm/ProyectoCC/blob/master/requirements.txt). La primera de ellas consiste en instalar una librería de *Python* denominada [*petpy*](https://pypi.org/project/petpy/) que está orientada a facilitar el uso de la API Petfinder con el fin de obtener unos datos concretos de las mascotas. Del mismo modo se instala [*pytest*](https://docs.pytest.org/en/latest/) puesto que es la librería que he utilizado para ejecutar los tests, así como *codecov* y su librería para *Python* [*pytest-cov*](https://pypi.org/project/pytest-cov/) con el objetivo de incluir tests de cobertura y generar sus respectivos informes.
+
+Para usar este fichero de construcción basta con realizar dos sencillos pasos:
+
+1. `make` para construir el entorno virtual e instalar las dependencias necesarias.
+2. `make test` para ejecutar los tests.
+
+#### Herramientas de integración continua.
+
+La primera herramienta de integración continua que he configurado para mi proyecto es [***Travis***](https://docs.travis-ci.com/), ya que destaca por su sencillo uso y su fácil conexión con *GitHub*. Asimismo es capaz de comprobar la compatibilidad del sistema que se está desarrollando en las versiones que se le especifique. En mi caso particular, he compuesto el rango de versiones válidas para mi proyecto mediante [*tox*](https://pypi.org/project/tox/), cuyo funcionamiento reside en crear un entorno virtual por cada versión de *Python* concretada para comprobar la compatibilidad de mi sistema con cada una de las versiones de este lenguaje. Para este proyecto la **versión mínima de Python es la 3.4 y la máxima es la 3.8**, incluyendo la versión de desarrollo.
+
+Como segunda herramienta de integración continua he elegido [***CircleCI***](https://circleci.com/) por diversas razones, entre ellas destaca la facilidad para conectarla con *GitHub* así como para redactar el fichero de configuración *yml*, la rapidez con la que ejecuta los tests y proporciona los resultados, además del soporte para el lenguaje *Python* con el que estoy desarrollando el proyecto.  
