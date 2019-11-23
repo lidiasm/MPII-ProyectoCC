@@ -35,4 +35,5 @@ Se integrarán un servicio de *loggin* mediante la librería [***logging***](htt
 2. `make test` para ejecutar los tests.
 
 Como herramientas de integración continua se utilizarán [***Travis***](https://docs.travis-ci.com/) y [***CircleCI***](https://circleci.com/).
+
 [Más información acerca de la herramienta de construcción elegida.](https://github.com/lidiasm/ProyectoCC/blob/master/docs/herramientas_construccion_e_integracion.md)
