@@ -7,7 +7,8 @@ Clase para testear las funciones de la clase Mascotas.
 
 @author: Lidia Sánchez Mérida
 """
-
+import sys
+sys.path.append("src")
 import mascotas 
 import ficha_mascota
 
