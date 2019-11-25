@@ -5,3 +5,4 @@ codecov
 gunicorn
 Celery
 rabbitmq
+Flask
