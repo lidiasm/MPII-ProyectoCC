@@ -14,14 +14,14 @@ app = Celery('mascotas', broker='pyamqp://guest@localhost//')
 
 class Mascotas:
     
+    ID = 0
+    mascotas = {}   # Variable de clase puesto que las mascotas son las mismas para
+                    # todos los objetos de la clase.
+    
     # Prueba para Celery
     @app.task
     def add(x, y):
         return x + y
-    
-    # Constructor
-    def __init__(self):
-        self.mascotas = []
     
     def comprobar_variable(self, variable, tipo):
         if (variable == None or isinstance(variable, tipo) == False): return True
@@ -55,10 +55,6 @@ class Mascotas:
         if (check_edad) :
             nueva_mascota.edad = "DNV"
             datos_no_validos += 1
-        check_raza = self.comprobar_variable(nueva_mascota.raza, str)
-        if (check_raza) :
-            nueva_mascota.raza = "DNV"
-            datos_no_validos += 1
         check_tipo_pelaje = self.comprobar_variable(nueva_mascota.tipo_pelaje, str)
         if (check_tipo_pelaje) :
             nueva_mascota.tipo_pelaje = "DNV"
@@ -88,7 +84,23 @@ class Mascotas:
             nueva_mascota.pais = "DNV"
             datos_no_validos += 1
         # Añadimos la nueva mascota con sus datos originales o modificados
-        self.mascotas.append(nueva_mascota)
+        #(Mascotas.mascotas).append(nueva_mascota)
+        (Mascotas.mascotas)[Mascotas.ID] = {
+                'nombre':nueva_mascota.nombre,
+                'tipo_animal':nueva_mascota.tipo_animal,
+                'raza':nueva_mascota.raza,
+                'tamanio':nueva_mascota.tamanio,
+                'genero':nueva_mascota.genero,
+                'edad':nueva_mascota.edad,
+                'tipo_pelaje':nueva_mascota.tipo_pelaje,
+                'estado':nueva_mascota.estado,
+                'ninios':nueva_mascota.bueno_con_ninios,
+                'perros':nueva_mascota.bueno_con_perros,
+                'gatos':nueva_mascota.bueno_con_gatos,
+                'ciudad':nueva_mascota.ciudad,
+                'pais':nueva_mascota.pais
+        }
+        Mascotas.ID += 1
         if (datos_no_validos > 0): return "Algunos datos de la mascota no son válidos."
         return "Nueva mascota añadida correctamente."
     
@@ -103,11 +115,22 @@ class Mascotas:
         # Conectamos con la API
         return "Credenciales correctas."
         
-    # Devuelve el objeto de la mascota que esté referenciada por el índice
-    # suministrado, si este fuese válido.
+    # Devuelve los datos de una mascota en concreto.
     def obtener_datos_mascota(self, n_mascota):
-        if n_mascota == None or isinstance(n_mascota, int) == False or n_mascota >= len(self.mascotas):
+        if n_mascota == None or type(n_mascota) != int or (n_mascota in Mascotas.mascotas) == False:
             return "Número de mascota inválido."
         # Devolvemos los datos de la mascota requerida
-        return self.mascotas[n_mascota]
-        
+        return Mascotas.mascotas[n_mascota]
+    
+    # Recupera todos los datos de las mascotas.
+    def obtener_datos(self):
+        return Mascotas.mascotas
+    
+    # Obtiene el número de mascotas registradas
+    def get_n_mascotas(self):
+        return len(Mascotas.mascotas)
+    
+    # Borra todos los datos de las mascotas.
+    def borrar_datos(self):
+        Mascotas.mascotas = {}
+        Mascotas.ID = 0
