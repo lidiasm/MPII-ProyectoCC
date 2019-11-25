@@ -15,6 +15,10 @@ import json
 app = Flask(__name__)
 m = mascotas.Mascotas()
 
+@app.route("/")
+def index():
+    return Response("Microservicio para recopilar datos de mascotas.", status=200)
+
 @app.route("/obtener_mascotas", methods=['GET'])
 def obtener_mascotas():
     """Servicio REST para obtener los datos de todas las mascotas.
