@@ -6,14 +6,8 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Instalar un entorno virtual con python3
-          command: pipenv install --three
+          name: Instalar las dependencias y crear el entorno virtual de Python.
+          command: make install
       - run:
-          name: Instalar dependencias
-          command: pipenv run pip install -r requirements.txt
-      - run:
-          name: Ejecutar tests
-          command: pipenv run python -m pytest tests/test_mascotas.py
-      - run:
-          name: Ejecutar test de cobertura
-          command: pipenv run python -m pytest --cov=mascotas tests/
+          name: Ejecutar los tests.
+          command: make test
