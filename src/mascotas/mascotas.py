@@ -116,15 +116,18 @@ class Mascotas:
         return "Credenciales correctas."
         
     def obtener_datos_mascota(self, n_mascota):
-        """Devuelve los datos de una mascota en particular."""
+        """Devuelve los datos de una mascota en particular si el id es válido.
+            Si no devuelve un mensaje informando de que el identificador no es válido."""
         if n_mascota == None or type(n_mascota) != int or (n_mascota in Mascotas.mascotas) == False:
-            return "Número de mascota inválido."
+            return "Identificador de mascota inválido."
 
         return Mascotas.mascotas[n_mascota]
     
     def obtener_datos(self):
-        """Obtiene el diccionario con los datos de todas las mascotas."""
-        return Mascotas.mascotas
+        """Obtiene el diccionario con los datos de todas las mascotas, si existen datos.
+            Si no devuelve un mensaje informativo."""
+        if (self.get_n_mascotas() > 0): return Mascotas.mascotas
+        else: return "No existen datos de mascotas."
     
     def get_n_mascotas(self):
         """Obtiene el número de mascotas del diccionario."""
