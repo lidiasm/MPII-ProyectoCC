@@ -22,7 +22,7 @@ def test_obtener_mascotas_incorrecto():
     lista_mascotas = mascotas.Mascotas()
     lista_mascotas.borrar_datos()
     respuesta = app.get('/obtener_mascotas')
-    assert (respuesta.status_code == 400)
+    assert (respuesta.status_code == 404)
     
 def test_obtener_mascotas():
     """Test 2: obtener los datos de todas las mascotas registradas correctamente."""
