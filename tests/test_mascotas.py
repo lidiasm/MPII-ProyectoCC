@@ -47,7 +47,7 @@ def test_obtener_mascota_sin_indice():
         None, None, None, "adoptable", True, False, True, "Atlanta", "EEUU")
     lista_mascotas = mascotas.Mascotas()
     lista_mascotas.aniadir_nueva_mascota(nueva_mascota)
-    assert lista_mascotas.obtener_datos_mascota(None) == "Número de mascota inválido."
+    assert lista_mascotas.obtener_datos_mascota(None) == "Identificador de mascota inválido."
     
 def test_obtener_mascota_indice_invalido():
     """Test 7: obtener los datos de una mascota con un índice inválido."""
@@ -55,7 +55,7 @@ def test_obtener_mascota_indice_invalido():
         None, None, None, "adoptable", True, False, True, "Atlanta", "EEUU")
     lista_mascotas = mascotas.Mascotas()
     lista_mascotas.aniadir_nueva_mascota(nueva_mascota)
-    assert lista_mascotas.obtener_datos_mascota(True) == "Número de mascota inválido."
+    assert lista_mascotas.obtener_datos_mascota(True) == "Identificador de mascota inválido."
     
 def test_obtener_mascota_indice_invalido2():
     """Test 8: obtener los datos de una mascota con un índice mayor al número de elementos."""
@@ -64,7 +64,7 @@ def test_obtener_mascota_indice_invalido2():
     lista_mascotas = mascotas.Mascotas()
     lista_mascotas.aniadir_nueva_mascota(nueva_mascota)
     print(len(lista_mascotas.mascotas))
-    assert lista_mascotas.obtener_datos_mascota(len(lista_mascotas.mascotas)) == "Número de mascota inválido."
+    assert lista_mascotas.obtener_datos_mascota(len(lista_mascotas.mascotas)) == "Identificador de mascota inválido."
     
 def test_obtener_mascota_indice_correcto():
     """Test 9: obtener los datos de una mascota con un índice válido."""
