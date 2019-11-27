@@ -23,13 +23,12 @@ def index():
 def obtener_mascotas():
     """Servicio REST para obtener los datos de todas las mascotas.
         Si hay datos de mascotas los devuelve en formato diccionario.
-        Si no devuelve el código 400 BAD REQUEST.
+        Si no devuelve el código 404 NOT FOUND.
     """
-    n_mascotas = m.get_n_mascotas()
-    if (n_mascotas > 0):
-        return Response(json.dumps(m.obtener_datos()), status=200, mimetype="application/json")
-    else:
-        return Response(status=400)
+    resultado = m.obtener_datos()
+    if (type(resultado) == dict): return Response(json.dumps(resultado),
+        status=200, mimetype="application/json")
+    else: return Response(status=404)
 
 @app.route("/obtener_una_mascota/<int:id_mascota>", methods=['GET'])
 def obtener_mascota(id_mascota):
@@ -39,7 +38,7 @@ def obtener_mascota(id_mascota):
         de la mascota en cuestión.
         Si no devuelve el código 404 NOT FOUND.
     """
-    if (id_mascota == None or type(id_mascota) != int or (id_mascota in m.mascotas) == False):
-        return Response(status=404)
-    else:
-        return Response(json.dumps(m.obtener_datos_mascota(id_mascota)), status=200, mimetype="application/json")
+    resultado = m.obtener_datos_mascota(id_mascota)
+    if (type(resultado) == str): return Response(status=404)
+    elif (type(resultado) == dict): return Response(json.dumps(resultado),
+          status=200, mimetype="application/json")
