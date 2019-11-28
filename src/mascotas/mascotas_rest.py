@@ -28,7 +28,7 @@ def obtener_mascotas():
     resultado = m.obtener_datos()
     if (type(resultado) == dict): return Response(json.dumps(resultado),
         status=200, mimetype="application/json")
-    else: return Response(status=404)
+    else: return Response("Aún no existen datos de mascotas.", status=404)
 
 @app.route("/obtener_una_mascota/<int:id_mascota>", methods=['GET'])
 def obtener_mascota(id_mascota):
@@ -39,6 +39,6 @@ def obtener_mascota(id_mascota):
         Si no devuelve el código 404 NOT FOUND.
     """
     resultado = m.obtener_datos_mascota(id_mascota)
-    if (type(resultado) == str): return Response(status=404)
+    if (type(resultado) == str): return Response("No existe una mascota con el ID especificado.", status=404)
     elif (type(resultado) == dict): return Response(json.dumps(resultado),
           status=200, mimetype="application/json")
