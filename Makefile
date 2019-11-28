@@ -6,7 +6,7 @@ install:
 	
 test:
 	# Ejecuta los tests de la clase Mascotas y de la clase de su API REST.
-	pipenv run python -m pytest tests/test_mascotas.py tests/test_mascotas_rest.py 
+	pipenv run python -m pytest tests/test_mascotas.py tests/test_mascotas_rest.py
 	# Tests de covertura para la clase Mascotas y la clase de su API REST.
 	pipenv run python -m pytest --cov=mascotas --cov=mascotas_rest tests/
 	
