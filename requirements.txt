@@ -3,6 +3,4 @@ pytest
 pytest-cov
 codecov
 gunicorn
-Celery
-rabbitmq
 Flask

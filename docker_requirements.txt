@@ -1,5 +1,3 @@
 petpy
 gunicorn
-Celery
-rabbitmq
 Flask
