@@ -18,7 +18,10 @@ start:
 		# 		asociado al servidor. Esto nos será de utilidad cuando deseemos terminar su ejecución sin 
 		# 		utilizar un gestor de procesos adicional.
 		# 3) Con la opción "-D" evitamos que el terminal se quede bloqueado por la ejecución del servidor.
-	pipenv run gunicorn --chdir src/mascotas/ mascotas_rest:app -p pid_gunicorn.pid -D
+		# 4) Con la opción "-b" especificamos el puerto en el que se atenderán las peticiones.
+		#			Por razones de seguridad este puerto se establecerá mediante una variable de entorno que deberá 
+		#			estar creada antes de ejecutar esta orden.
+	pipenv run gunicorn --chdir src/mascotas/ mascotas_rest:app -p pid_gunicorn.pid -D -b :${PUERTO}
 
 stop:
 	# Fin de la ejecución del proceso asociado al servidor Gunicorn. Para ello se hará uso del comando 
