@@ -30,4 +30,4 @@ COPY src/mascotas/mascotas.py src/mascotas/ficha_mascota.py src/mascotas/mascota
 EXPOSE ${PUERTO}
 
 # Ejecutamos el servidor Gunicorn estableciendo como puerto el anterior.
-CMD gunicorn -b 0.0.0.0:${PUERTO} mascotas_rest:app
+CMD gunicorn -b 0.0.0.0:5000 mascotas_rest:app
