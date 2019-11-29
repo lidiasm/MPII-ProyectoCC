@@ -57,7 +57,7 @@ Para más información acerca de estos dos procesos automatizados puede acceder 
 
 #### Contenedor y despliegue de la imagen en *Docker Hub.*
 
-[Contenedor *obtener_mascotas* en *Docker Hub*](https://hub.docker.com/r/lidiasm/obtener_mascotas)
+[Contenedor *obtener_mascotas* en *Docker Hub*.](https://hub.docker.com/r/lidiasm/obtener_mascotas)
 
 Con el fin de construir el contenedor para albergar el microservicio anterior, en primer lugar se debe definir el sistema operativo que va a utilizar. Si bien existen diferentes sistemas operativos para usar en un contenedor, el más popular es [*Alpine*](https://hub.docker.com/_/alpine) puesto que destaca, principalmente, por su ligereza. Sin embargo investigando acerca de las diversas alternativas encontré una [comparación](https://www.turnkeylinux.org/blog/alpine-vs-debian) en la que se proporcionaban las ventajas e inconvenientes de ambos, destacando que [*Debian*](https://hub.docker.com/_/debian/) dispone de una mejor infraestructura, un mayor número de paquetes y una mejor documentación. En base a esto y a que quería utilizar un sistema operativo diferente al típico *Alpine*, mi contenedor hará uso de **Debian**, en particular la **versión *slim* para *Python* 3.6**, en la cual se presenta una versión más liviana de este sistema operativo.
 
