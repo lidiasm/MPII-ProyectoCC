@@ -1,5 +1,5 @@
 # Establecemos la imagen para el contenedor. En mi caso voy a optar por el 
-# sistema operativo Debian con la versión 3.6.8 de Python, puesto que es en la
+# sistema operativo Debian con la versión slim de Python 3.6, puesto que es en la
 # que estoy desarrollando el proyecto.
 FROM python:3.6-slim
 
@@ -9,7 +9,7 @@ LABEL maintainer="Lidia Sánchez lidiasm96@correo.ugr.es"
 # Le pasamos como argumento el puerto donde deberá escuchar las peticiones.
 ARG PUERTO
 # Establecemos el puerto pasado como parámetro como una variable de entorno 
-# para que persista tras la construcción del contenedor.
+# para que persista tras la construcción del contenedor. 
 ENV PUERTO ${PUERTO}
 
 # Establecemos el directorio de trabajo del proyecto.
@@ -29,5 +29,5 @@ COPY src/mascotas/mascotas.py src/mascotas/ficha_mascota.py src/mascotas/mascota
 # Especificamos el puerto para que las peticiones lleguen al contenedor.
 EXPOSE ${PUERTO}
 
-# Ejecutamos el servidor Gunicorn especificándole el puerto anterior.
+# Ejecutamos el servidor Gunicorn estableciendo como puerto el anterior.
 CMD gunicorn -b 0.0.0.0:${PUERTO} mascotas_rest:app
