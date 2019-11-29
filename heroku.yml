@@ -1,0 +1,11 @@
+build:
+  docker:
+    # Indicamos que se construirá el contenedor desde el dockerfile que se encuentra en el
+    # directorio raíz del proyecto.
+    web: Dockerfile 
+  config:
+    # Definimos la variable de entorno que indica el puerto para ejecutar el microservicio.
+    PUERTO: 80
+    
+# No incluimos el comando "run" para que inice el microservicio utilizando la directiva
+# CMD del dockerfile.
