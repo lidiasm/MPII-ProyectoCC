@@ -38,6 +38,29 @@ Como herramientas de integración continua se utilizarán [***Travis***](https:/
 
 [Más información acerca de las herramientas de construcción e integración.](https://github.com/lidiasm/ProyectoCC/blob/master/docs/herramientas_construccion_e_integracion.md)
 
+#### Primer microservicio. Recopilar datos de la API Petfinder
+
+Este microservicio es fundamental para el desarrollo del proyecto, pues es el encargado de conectarse con la API Petfinder, para lo cual debemos de proporcionarle nuestras correspondientes API key y secret, así como descargar datos de mascotas, filtrarlos para solo almacenar los que nos interesan en una estructura de datos y, posteriormente, visualizarlos. Este conjunto de funcionalidades se corresponden con [uno de los pasos necesarios](https://github.com/lidiasm/ProyectoCC/issues/23#issue-512987660) para cumplir las dos historias de usuario que han sido definidas anteriormente. Para su implementación se ha aplicado una *arquitectura basada en capas* puesto que la lógica de negocio reside en la clase *Mascotas* y los servicios *REST* que acceden a las funciones de esta clase se encuentran en una capa distinta. Como todos los servicios REST asociados a la clase *Mascotas* se encargan de realizar peticiones, como conectar con la API Petfinder, o de proporcionar información, como obtener los datos de las mascotas, todos son accesibles mediante el verbo *GET* de *HTTP*. Esto se ejemplifica con la siguiente representación gráfica:
+
+![Esquema de la arquitectura por capas del primer microservicio.](https://github.com/lidiasm/ProyectoCC/blob/master/docs/imgs/Primer%20microservicio.png)
+
+Del mismo modo que se han desarrollado *tests* para comprobar el correcto funcionamiento de los métodos de la clase *Mascotas* también se han desarrollado *tests* para verificar que el comportamiento de los servicios *REST* es el adecuado. Por ello se han realizado diversas comprobaciones tales como la conexión a la API Petfinder, la descarga de datos de mascotas así como su visualización.
+
 #### Servidor Web
 
 Tal y como se advierte en diversas páginas de desarrollo, como [esta](https://www.toptal.com/flask/flask-production-recipes), se recomienda utilizar un servidor web adicional para controlar los diferentes aspectos que intervienen en la futura fase de producción. Asimismo, teniendo en cuenta que el proyecto se desarrolla en Python utilizaré un [*WSGI*](https://www.fullstackpython.com/wsgi-servers.html) que proprociona tanto un gestor de procesos como una interfaz web para acceder a las funciones de las clases. Tras investigar las diversas alternativas existentes se puede decir que los más utilizados son [***uWSGI***](https://uwsgi-docs.readthedocs.io/en/latest/), [***Waitress***](https://waitress.readthedocs.io/en/stable/) y [***Gunicorn (Green Unicorn)***](https://gunicorn.org/#docs). En esta [comparativa](https://docs.python-guide.org/scenarios/web/) *uWSGI* destaca por su versatilidad pero también por su complejidad para utilizarlo mientras que *Gunicorn* tiene como ventaja su facilidad de uso y es popularmente utilizada junto con *Flask*. Por lo tanto en mi proyecto haré uso de ***Gunicorn*** como WSGI.
+
+Para **ejecutar el microservicio** usando *Gunicorn* y desde la herramienta de construcción basta con ejecutar: `make start`.
+Para **detener el microservicio** utilizando los mismos mecanismos deberemos de ejecutar la orden: `make stop`.
+
+Para más información acerca de estos dos procesos automatizados puede acceder al [*makefile*](https://github.com/lidiasm/ProyectoCC/blob/master/Makefile) donde se encuentran todos los pasos documentados.
+
+#### Contenedor y despliegue de la imagen en *Docker Hub.*
+
+    Contenedor: https://hub.docker.com/r/lidiasm/obtener_mascotas
+
+Con el fin de construir el contenedor para albergar el microservicio anterior, en primer lugar se debe definir el sistema operativo que va a utilizar. Si bien existen diferentes sistemas operativos para usar en un contenedor, el más popular es [*Alpine*](https://hub.docker.com/_/alpine) puesto que destaca, principalmente, por su ligereza. Sin embargo investigando acerca de las diversas alternativas encontré una [comparación](https://www.turnkeylinux.org/blog/alpine-vs-debian) en la que se proporcionaban las ventajas e inconvenientes de ambos, destacando que [*Debian*](https://hub.docker.com/_/debian/) dispone de una mejor infraestructura, un mayor número de paquetes y una mejor documentación. En base a esto y a que quería utilizar un sistema operativo diferente al típico *Alpine*, mi contenedor hará uso de **Debian**, en particular la **versión *slim* para *Python* 3.6**, en la cual se presenta una versión más liviana de este sistema operativo.
+
+Para construir el contenedor se ha redactado el fichero [Dockerfile](https://github.com/lidiasm/ProyectoCC/blob/master/Dockerfile) en el cual se detallan las instrucciones que se han llevado a cabo y su respectiva justificación. Para construirlo se debe ejecutar la siguiente instrucción `docker run -e API_KEY="tu api key de Petfinder" -e API_SECRET="tu api secret de Petfinder" -p <puerto host>:<puerto Gunicorn> -d obtener_mascotas`, en la cual la opción *-e* le proporcionamos las dos variables de entorno necesarias para conectar con la API Petfinder, con *-p* especificamos los dos puertos por los que se van a enviar las peticiones y recibir los resultados y por último con la opción *-d* indicamos que el *docker* se ejecute en segundo plano.
+
+En cambio, si desea ejecutar el contenedor sin construirlo basta con descargarlo desde *Docker Hub* a través del enlace incluido al principio de esta sección y ejecutar el comando anterior modificando el nombre por el del contenedor descargado, es decir, *lidiasm/obtener_mascotas*.
