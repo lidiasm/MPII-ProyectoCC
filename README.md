@@ -4,6 +4,7 @@
 [![Build Status](https://travis-ci.org/lidiasm/ProyectoCC.svg?branch=master)](https://travis-ci.org/lidiasm/ProyectoCC)
 [![CircleCI](https://circleci.com/gh/lidiasm/ProyectoCC/tree/master.svg?style=svg)](https://circleci.com/gh/lidiasm/ProyectoCC/tree/master)
 [![Coverage](https://codecov.io/gh/lidiasm/ProyectoCC/branch/master/graphs/badge.svg)](https://codecov.io/gh/lidiasm/ProyectoCC)
+[![Heroku](https://www.herokucdn.com/deploy/button.svg)](https://obtenermascotas.herokuapp.com/)
 
 ### Máster en Ingeniería Informática en la Universidad de Granada.
 
@@ -64,3 +65,10 @@ Con el fin de construir el contenedor para albergar el microservicio anterior, e
 Para construir el contenedor se ha redactado el fichero [Dockerfile](https://github.com/lidiasm/ProyectoCC/blob/master/Dockerfile) en el cual se detallan las instrucciones que se han llevado a cabo y su respectiva justificación. Para construirlo se debe ejecutar la siguiente instrucción `docker run -e API_KEY="tu api key de Petfinder" -e API_SECRET="tu api secret de Petfinder" -p <puerto host>:<puerto Gunicorn> -d obtener_mascotas`, en la cual la opción *-e* le proporcionamos las dos variables de entorno necesarias para conectar con la API Petfinder, con *-p* especificamos los dos puertos por los que se van a enviar las peticiones y recibir los resultados y por último con la opción *-d* indicamos que el *docker* se ejecute en segundo plano.
 
 En cambio, si desea ejecutar el contenedor sin construirlo basta con descargarlo desde *Docker Hub* a través del enlace incluido al principio de esta sección y ejecutar el comando anterior modificando el nombre por el del contenedor descargado, es decir, *lidiasm/obtener_mascotas*.
+
+#### Despliegue en Heroku.
+
+[Contenedor desplegado en Heroku.](https://obtenermascotas.herokuapp.com/)
+
+Para desplegar el microservicio en *Heroku* en primer lugar debemos darnos de alta en esta plataforma. A continuación he instalado *Heroku Cli* con el objetivo de realizar el despliegue mediante la línea de comandos. Una vez iniciamos sesión debemos crear un nuevo repositorio en la plataforma para albergar nuestro contenedor mediante el comando `heroku create obtenermascotas`. Para poder realizar la conexión con la API Petfinder necesitamos establecer las variables de entorno necesarias para almacenar nuestra API key y secret. Esto se puede realizar con la orden `heroku config:set API_KEY=tu_api_key API_SECRET=tu_api_secret`. Para terminar creamos nuestro fichero [heroku.yml](https://github.com/lidiasm/ProyectoCC/blob/master/heroku.yml) en el que indicaremos que vamos a utilizar el fichero dockerfile para construir nuestro contenedor y le proporcionamos el puerto para *Gunicorn* como variable de entorno. Tras completar este proceso solo nos queda ejecutar el comando `heroku stack:set container` y subirlo todo a *Heroku*. 
+Si accedemos al contenedor desplegado podremos realizar todas las acciones que anteriormente se describieron en la sección anterior.
