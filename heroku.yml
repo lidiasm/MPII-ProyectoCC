@@ -5,6 +5,6 @@ build:
     web: Dockerfile 
   config:
     # Definimos la variable de entorno que indica el puerto para ejecutar el microservicio.
-    PUERTO: 8080
+    PUERTO: 80
 # No incluimos el comando "run" para que inice el microservicio utilizando la directiva
 # CMD del dockerfile.
