@@ -7,24 +7,19 @@ Clase que contiene los datos de todas las mascotas disponibles en la API Petfind
 
 @author: Lidia Sánchez Mérida
 """
-
-#from celery import Celery
-#app = Celery('mascotas', broker='pyamqp://guest@localhost//')
-#from .celery import app
+import petpy
+import ficha_mascota
 
 class Mascotas:
     
     ID = 0
     """ Los datos de las mascotas son comunes a todos los objetos de la clase."""
     mascotas = {}  
-    
-    # Prueba para Celery
-#    @app.task
-#    def add(x, y):
-#        return x + y
+    """ Conexión con la API Petfinder"""
+    api_petifinder = None
     
     def comprobar_variable(self, variable, tipo):
-        """Compruba el tipo y el valor de una variable."""
+        """Comprueba el tipo y el valor de una variable."""
         if (variable == None or isinstance(variable, tipo) == False): return True
         return False
     
@@ -112,8 +107,28 @@ class Mascotas:
         
         self.api_key = api_key
         self.api_secret = api_secret
-        # Conectamos con la API
-        return "Credenciales correctas."
+        """Conectamos con la API Petfinder"""
+        try:
+            Mascotas.api_petifinder = petpy.Petfinder(self.api_key, self.api_secret)
+            return "Conexión realizada correctamente."
+        except petpy.exceptions.PetfinderInvalidCredentials:
+            return "Credenciales no válidas."
+    
+    def descargar_datos_mascotas(self):
+        """Obtenemos los 20 primeros animales."""
+        if (Mascotas.api_petifinder == None):
+            return "Error. Primero debe conectarse a la API Petfinder."
+        else:
+            animales = Mascotas.api_petifinder.animals()
+            for animal in animales['animals']:
+                nueva_mascota = ficha_mascota.FichaMascota(animal['name'], animal['type'], 
+                   animal['breeds']['primary'], animal['size'], animal['gender'], animal['age'],
+                   animal['coat'], animal['status'], animal['environment']['children'], 
+                   animal['environment']['cats'], animal['environment']['dogs'], 
+                   animal['contact']['address']['city'], animal['contact']['address']['country'])
+                self.aniadir_nueva_mascota(nueva_mascota)
+                
+            return animales
         
     def obtener_datos_mascota(self, n_mascota):
         """Devuelve los datos de una mascota en particular si el id es válido.
@@ -123,7 +138,7 @@ class Mascotas:
 
         return Mascotas.mascotas[n_mascota]
     
-    def obtener_datos(self):
+    def obtener_mascotas(self):
         """Obtiene el diccionario con los datos de todas las mascotas, si existen datos.
             Si no devuelve un mensaje informativo."""
         if (self.get_n_mascotas() > 0): return Mascotas.mascotas
