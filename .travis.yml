@@ -1,14 +1,18 @@
 language: python
-python: 
-    - "3.5"
-    - "3.6"
-    - "3.6.8"
-    - "3.7"
-    - "3.8"
-    - "3.8-dev"
+python:
+- '3.5'
+- '3.6'
+- 3.6.8
+- '3.7'
+- '3.8'
+- 3.8-dev
 before_install:
-  - make install
-script: 
-  - make test
+- make install
+script:
+- make test
 after_success:
-  - codecov
+- codecov
+env:
+  global:
+  - secure: N5CGtJxjdSLSRq1bkJeoZY/aUlCm+IrWFahp8QGNs8nHZXmarfhlRCHc6AcrsxOXQNMMM+vmc/9Nl4KH1/RrY4yXku6ZUvIN9MP9JN1tdFk8ErhhkR5alhOdxIVZmGiJeDmHy+AXLFPFFZYZ76LWJyNOJT+LOwQHjkzjNqPEwIBa8dZRh2rLBiiVj3ElWdh9l0NS+cTLUHxVPWBx4i+wkwYzpZlCbI64gThgvo3cPHrJazq9tXS9Fuz6350E6NgHwwj/GFaJ+v4Mm3I/krouXGBzUN34kcf6zRe7iYpMbZ7KitoEgwkB+oj91hk98JZdMi0g3vyn4YuW6aQOtOtEYslLGYUv3Nw5jtCxv6QtkKeolPjbyurd0uU4vQvfGjSRh22UNLAvwJ03DBox0kMGVtngrHYPyZ7x8fE9sBI8NCfWXsy5x0auyAWiG5ZHbYR7npHtWNxanFs8Ik/THX+/Q+sitdF5EN7S47nkx9A9FmXPhLJgiO6tja0rhdVonEM2xEv5AShWsuIDTtO48ZON7KW3x1c8GVOPpN5zJcon19oKeMtxW2O1x1OOg2Y4ZuZVf1iIrZQ0G1iA/uWgQ6Aep35uvXKXC1hWIfuFM6ZDebTUp0b7XzwqawMwR/sIy1Kg+RwI0F2iyYURVCY7fUl4ljoVUmSF+p02lqFwSIqn+pY=
+  - secure: g4v3O5IJAqLnb+uLitr3veNz8vhjf8GL7nfLlI1qRJdEI2bzB6OP1uoLJh8tjlIDfRVif4GIxUrEgK8itLFYrPeW59jcDOa6At9vzUcS/HDPtwyNsJKWwHwqac/hgeGoHPOK6T6Ao+OcqzCl5evu2FEqF8gRy8vPz0GOhbieZbq5p8kZ1zxBrEnmXJzdVkBfir3NI9U7IFaPsnV13TA28WAIJ+Msc27Q0YQxubdfpI9+Q+hUJExlDiBvU+RSks5h1sNZQ3r8klOhON3M8awnd5ffSE2XvdsUiW2LcMcPGCVnUA7/IAB7rhg7ur4gCKyjDzdQYW7fpnVDMgkuaEP/crpf1s91OOgMlIdaOD5jsuSZc6kK82mq01HKPcw9fsVmkocxm6waSIyw6MbakOcTH/oYF+XdYZz2QqBSG7WxmkdQNag1xnoFCL22Sb2MYy+cFu4TbtpJt9DS5V8JV2ANrJRFt2tEaq5HWSjvr6kxTLce6BwIl4NkitgLUc5YLE/Vf5+kQiGW2wl24RhfQROLWuWFvy8eCd+NQPr6WI958iFyAG4Ep2/V0puRNyttGsJcWAilVEtmtQM431+pwdE/qCQ/FL6TDMUWBKqKU127cCIcPqAA+XgqY645cKI7fyDkCB4sdKvzOrK2HpquvZJY/6aC/HespOHXjHapQ5TeSYI=
