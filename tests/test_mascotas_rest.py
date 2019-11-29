@@ -45,3 +45,20 @@ def test_obtener_una_mascota_incorrecto():
     """Test 4: intento fallido de obtener los datos de una mascota determinada."""
     respuesta = app.get('/obtener_una_mascota/-1')
     assert respuesta.status_code == 404
+    
+def test_conectar_api():
+    """Test 5: conexión correcta con la API Petfinder."""
+    respuesta = app.get('/conectar_petfinder')
+    assert respuesta.status_code == 200
+    
+def test_descargar_datos_mascotas():
+    """Test 6: descarga correcta de datos de nuevas mascotas."""
+    respuesta = app.get('/descargar_datos_mascotas')
+    assert (respuesta.status_code == 200 and respuesta.headers["Content-Type"] == "application/json")
+    
+def test_descargar_datos_mascotas_incorrecto():
+    """Test 7: intento fallido de descargar nuevos datos de mascotas porque
+    no se ha realizado una conexión previamente con la API Petfinder."""
+    mascotas.Mascotas.api_petifinder = None
+    respuesta = app.get('/descargar_datos_mascotas')
+    assert respuesta.status_code == 400
