@@ -6,6 +6,7 @@ build:
   config:
     # Definimos la variable de entorno que indica el puerto para ejecutar el microservicio.
     PUERTO: 80
-    
+run:
+  web: docker run -p 80:80 -d obtenermascotas
 # No incluimos el comando "run" para que inice el microservicio utilizando la directiva
 # CMD del dockerfile.
