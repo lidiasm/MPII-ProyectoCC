@@ -6,10 +6,8 @@ FROM python:3.6-slim
 # Datos sobre el dueño del contenedor.
 LABEL maintainer="Lidia Sánchez lidiasm96@correo.ugr.es"
 
-# Le pasamos como argumento el puerto donde deberá escuchar las peticiones.
-ARG PUERTO
-# Establecemos el puerto pasado como parámetro como una variable de entorno 
-# para que persista tras la construcción del contenedor. 
+# Pasamos el puerto al que debe conectarse Gunicorn estableciendo, para ello, 
+# una variable de entorno para que persista tras la construcción del contenedor. 
 ENV PUERTO ${PUERTO}
 
 # Establecemos el directorio de trabajo del proyecto.
