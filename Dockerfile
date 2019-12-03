@@ -8,7 +8,7 @@ LABEL maintainer="Lidia Sánchez lidiasm96@correo.ugr.es"
 
 # Pasamos el puerto al que debe conectarse Gunicorn estableciendo, para ello, 
 # una variable de entorno para que persista tras la construcción del contenedor. 
-ENV PUERTO ${PUERTO}
+ENV PORT ${PORT}
 
 # Establecemos el directorio de trabajo del proyecto.
 WORKDIR Escritorio/CC/ProyectoCC
@@ -25,7 +25,7 @@ RUN apt-get update && pip install --upgrade pip && pip install --requirement /tm
 COPY src/mascotas/mascotas.py src/mascotas/ficha_mascota.py src/mascotas/mascotas_rest.py ./
 
 # Informamos acerca del puerto en el que se van a escuchar las peticiones.
-EXPOSE ${PUERTO}
+EXPOSE ${PORT}
 
 # Ejecutamos el servidor Gunicorn estableciendo como puerto el anterior.
-CMD gunicorn -b 0.0.0.0:${PUERTO} mascotas_rest:app
+CMD gunicorn -b 0.0.0.0:${PORT} mascotas_rest:app
