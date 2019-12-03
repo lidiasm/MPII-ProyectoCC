@@ -1,7 +1,5 @@
-# Establecemos la imagen para el contenedor. En mi caso voy a optar por el 
-# sistema operativo Debian con la versión slim de Python 3.6, puesto que es en la
-# que estoy desarrollando el proyecto.
-FROM python:3.6-slim
+# Sistema base elegido a partir de un estudio de prestaciones.
+FROM python:3.6-slim-stretch
 
 # Datos sobre el dueño del contenedor.
 LABEL maintainer="Lidia Sánchez lidiasm96@correo.ugr.es"
