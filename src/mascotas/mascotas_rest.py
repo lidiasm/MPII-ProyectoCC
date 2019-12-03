@@ -26,8 +26,8 @@ def conectar_petfinder():
     haberse definido, previamente, dos variables de entorno con la api key y
     la api secret más la variable correspondiente al puerto donde se ejecutará Gunicorn.
     Si las credenciales no son válidas devolverá el código 404 BAD REQUEST."""
-    puerto = os.environ.get("PUERTO")
-    if (puerto == None): os.environ["PUERTO"]='8000'
+    puerto = os.environ.get("PORT")
+    if (puerto == None): os.environ["PORT"]='8000'
     api_key = os.environ.get("API_KEY")
     api_secret = os.environ.get("API_SECRET")
     resultado = m.conectar_APIPetfinder(api_key, api_secret)

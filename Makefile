@@ -21,7 +21,7 @@ start:
 		# 4) Con la opción "-b" especificamos el puerto en el que se atenderán las peticiones.
 		#			Por razones de seguridad este puerto se establecerá mediante una variable de entorno que deberá 
 		#			estar creada antes de ejecutar esta orden.
-	pipenv run gunicorn --chdir src/mascotas/ mascotas_rest:app -p pid_gunicorn.pid -D -b :${PUERTO}
+	pipenv run gunicorn --chdir src/mascotas/ mascotas_rest:app -p pid_gunicorn.pid -D -b :${PORT}
 
 stop:
 	# Fin de la ejecución del proceso asociado al servidor Gunicorn. Para ello se hará uso del comando 
