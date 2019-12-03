@@ -24,7 +24,7 @@ RUN apt-get update && pip install --upgrade pip && pip install --requirement /tm
 # al directorio de trabajo.
 COPY src/mascotas/mascotas.py src/mascotas/ficha_mascota.py src/mascotas/mascotas_rest.py ./
 
-# Especificamos el puerto para que las peticiones lleguen al contenedor.
+# Informamos acerca del puerto en el que se van a escuchar las peticiones.
 EXPOSE ${PUERTO}
 
 # Ejecutamos el servidor Gunicorn estableciendo como puerto el anterior.
