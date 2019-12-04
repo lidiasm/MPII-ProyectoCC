@@ -41,7 +41,7 @@ def descargar_datos_mascotas():
     Si no se ha realizado dicha conexion devolverá el código de error 400 BAD REQUEST.
     """
     resultado = m.descargar_datos_mascotas()
-    if (type(resultado) == str): return Response(resultado, status=400)
+    if (type(resultado) == str): return Response(json.dumps(resultado), status=400)
     elif (type(resultado) == dict): return Response(json.dumps(resultado),
           status=200, mimetype="application/json")
 

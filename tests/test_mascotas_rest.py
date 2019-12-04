@@ -54,7 +54,8 @@ def test_conectar_api():
 def test_descargar_datos_mascotas():
     """Test 6: descarga correcta de datos de nuevas mascotas."""
     respuesta = app.get('/descargar_datos_mascotas')
-    assert (respuesta.status_code == 200 and respuesta.headers["Content-Type"] == "application/json")
+    if (respuesta.data == "Límite de peticiones superado."): assert (respuesta.status_code == 400)
+    else: assert (respuesta.status_code == 200 and respuesta.headers["Content-Type"] == "application/json")
     
 def test_descargar_datos_mascotas_incorrecto():
     """Test 7: intento fallido de descargar nuevos datos de mascotas porque

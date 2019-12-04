@@ -75,7 +75,9 @@ def test_descargar_datos_mascotas():
     api_key = os.environ.get("API_KEY")
     api_secret = os.environ.get("API_SECRET")
     lista_mascotas.conectar_APIPetfinder(api_key, api_secret)
-    assert type(lista_mascotas.descargar_datos_mascotas() == dict)
+    resultado = lista_mascotas.descargar_datos_mascotas()
+    if (resultado != "Límite de peticiones superado."):
+        assert type(resultado == dict)
     
 def test_descargar_datos_mascotas_incorrecto():
     """Test 11: intento fallido de descargar datos de mascotas nuevas."""

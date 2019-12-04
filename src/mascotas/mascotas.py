@@ -119,7 +119,11 @@ class Mascotas:
         if (Mascotas.api_petifinder == None):
             return "Error. Primero debe conectarse a la API Petfinder."
         else:
-            animales = Mascotas.api_petifinder.animals()
+            try:
+                animales = Mascotas.api_petifinder.animals()
+            except:
+                return "Límite de peticiones superado."
+                
             for animal in animales['animals']:
                 nueva_mascota = ficha_mascota.FichaMascota(animal['name'], animal['type'], 
                    animal['breeds']['primary'], animal['size'], animal['gender'], animal['age'],
