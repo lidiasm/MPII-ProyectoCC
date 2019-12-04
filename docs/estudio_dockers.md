@@ -28,7 +28,7 @@ En este caso, de nuevo, se trata de una versión mínima pero del sistema operat
 
 ### Stretch.
 
-Se trata de la versión completa del sistema operativo anterior **Debian 9**, el cual ha sido incluido en este estudio para destacar la considerable diferencia de tamaño con respecto a la versión minimalista anterior, puesto que en este caso el tamaño del contenedor utilizando esta base aumenta hasta `1.1GB`. Aunque no lo considere como una opción, a continuación se adjuntan sus resultados de las peticiones.
+Se trata de la versión completa del sistema operativo anterior **Debian 9**, el cual ha sido incluido en este estudio para destacar la considerable diferencia de tamaño con respecto a la versión minimalista anterior, puesto que en este caso el tamaño del contenedor utilizando esta base aumenta hasta `1.11GB`. Aunque no lo considere como una opción, a continuación se adjuntan sus resultados de las peticiones.
 
 ![Stretch petfinder.](https://github.com/lidiasm/ProyectoCC/blob/master/docs/imgs/ab%20stretch%20conexi%C3%B3n.png)
 
@@ -37,7 +37,7 @@ Se trata de la versión completa del sistema operativo anterior **Debian 9**, el
 ### Alpine.
 
 Por último consideraremos este sistema base puesto que es uno de los más ligeros. Sin embargo, como mi proyecto utiliza la librería *pandas* y *Alpine* no dispone de herramientas de compilación para construir esta librería necesito utilizar una versión que de este sistema en la que ya se encuentre *pandas* instalada previamente. Para realizar las pruebas con este sistema he utilizado [esta imagen](https://hub.docker.com/r/quoinedev/python3.6-pandas-alpine). 
-El tamaño del contenedor al construirlo con esta versión base es de `655 MB` y los resultados de las peticiones se presentan a continuación.
+El tamaño del contenedor al construirlo con esta versión base es de `664MB` y los resultados de las peticiones se presentan a continuación.
 
 ![Alpine petfinder.](https://github.com/lidiasm/ProyectoCC/blob/master/docs/imgs/ab%20alpine%20conexi%C3%B3n.png)
 
@@ -52,7 +52,7 @@ Todos los tamaños de los contenedores generados para cada sistema base se puede
 A continuación se muestra una tabla resumen de las prestaciones ofrecidas por cada uno de los sistemas base en relación a las peticiones realizadas al servicio REST *conectar_petfinder*.
 
 | Sistema base. | Tiempo total. | Tiempo/petición en paralelo. | Peticiones/segundo. |
-| --- | --- | --- | --- | --- | --- | --- |
+| --- | --- | --- | --- |
 | Slim. | 73,891 s. | 0,738 s/peticion | 1,35 peticiones/s |
 | Slim buster. | 48,758 s. | 0,487 s/petición | 2,05 peticiones/s |
 | Slim stretch. | 50,895 s. | 0,508 s/petición | 1,96 peticiones/s |
