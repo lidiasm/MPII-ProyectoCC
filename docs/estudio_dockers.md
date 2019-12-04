@@ -4,7 +4,7 @@ En primer lugar comienzo por mostrar los resultados proporcionados por [*ab*](ht
 
 ### Slim.
 
-Esta versión es una de las más ligeras en las que se incluyen solo los paquetes imprescindibles para ejecutar aplicaciones de *Python*. El tamaño del contenedor con este sistema operativo como base es de `346MB`. Si bien uno de los objetivos de investigar diversos sistemas operativos para la base de un contenedor es encontrar alguno que sea ligero para que su despliegue sea más rápido, también hay que tener en cuenta las necesidades de la aplicación que se vaya a ejecutar. En mi caso consta del microservicio encargado de realizar una conexión con la API Petfinder, descargar datos de mascotas y visualizarlos. Por lo tanto, es necesario comprobar la velocidad con la que se satisfacen las peticiones a estos servicios REST así como su grado de completitud. De entre todos los servicios he escogido los dos que a mi parecer tienen una mayor complejidad y consumo de recursos: conectar con la API Petfinder y descargar datos de hasta 20 mascotas. A continuación se muestran los resultados proporcionados por [*ab*] al realizar 100 peticiones con 10 hebras a cada uno de los dos servicios.
+Esta versión es una de las más ligeras en las que se incluyen solo los paquetes imprescindibles para ejecutar aplicaciones de *Python*. El tamaño del contenedor con este sistema operativo como base es de `346 MB`. Si bien uno de los objetivos de investigar diversos sistemas operativos para la base de un contenedor es encontrar alguno que sea ligero para que su despliegue sea más rápido, también hay que tener en cuenta las necesidades de la aplicación que se vaya a ejecutar. En mi caso consta del microservicio encargado de realizar una conexión con la API Petfinder, descargar datos de mascotas y visualizarlos. Por lo tanto, es necesario comprobar la velocidad con la que se satisfacen las peticiones a estos servicios REST así como su grado de completitud. De entre todos los servicios he escogido los dos que a mi parecer tienen una mayor complejidad y consumo de recursos: conectar con la API Petfinder y descargar datos de hasta 20 mascotas. A continuación se muestran los resultados proporcionados por [*ab*] al realizar 100 peticiones con 10 hebras a cada uno de los dos servicios.
 
 ![Slim petfinder.](https://github.com/lidiasm/ProyectoCC/blob/master/docs/imgs/ab%20slim%20conexi%C3%B3n.png)
 
@@ -12,7 +12,7 @@ Esta versión es una de las más ligeras en las que se incluyen solo los paquete
 
 ### Slim buster.
 
-Esta versión se trata del sistema operativo [**Debian 10**](https://wiki.debian.org/DebianBuster) en su versión minimalista y con la cual el contenedor pasa a ser de `363MB`. Al igual que en el caso anterior se repite de nuevo el mismo procedimiento y a continuación se presentan los resultados.
+Esta versión se trata del sistema operativo [**Debian 10**](https://wiki.debian.org/DebianBuster) en su versión minimalista y con la cual el contenedor pasa a ser de `363 MB`. Al igual que en el caso anterior se repite de nuevo el mismo procedimiento y a continuación se presentan los resultados.
 
 ![Slim-buster petfinder.](https://github.com/lidiasm/ProyectoCC/blob/master/docs/imgs/ab%20slim-buster%20conexi%C3%B3n.png)
 
@@ -20,7 +20,7 @@ Esta versión se trata del sistema operativo [**Debian 10**](https://wiki.debian
 
 ### Slim stretch.
 
-En este caso, de nuevo, se trata de una versión mínima pero del sistema operativo [**Debian 9**](https://wiki.debian.org/DebianStretch) con el que al construir el contenedor su tamaño disminuye hasta los `323MB`. A continuación se presentan los resultados obtenidos al realizar el mismo procedimiento de peticiones pero con este sistema como base.
+En este caso, de nuevo, se trata de una versión mínima pero del sistema operativo [**Debian 9**](https://wiki.debian.org/DebianStretch) con el que al construir el contenedor su tamaño disminuye hasta los `323 MB`. A continuación se presentan los resultados obtenidos al realizar el mismo procedimiento de peticiones pero con este sistema como base.
 
 ![Slim-stretch petfinder.](https://github.com/lidiasm/ProyectoCC/blob/master/docs/imgs/ab%20slim-stretch%20conexi%C3%B3n.png)
 
@@ -28,7 +28,7 @@ En este caso, de nuevo, se trata de una versión mínima pero del sistema operat
 
 ### Stretch.
 
-Se trata de la versión completa del sistema operativo anterior **Debian 9**, el cual ha sido incluido en este estudio para destacar la considerable diferencia de tamaño con respecto a la versión minimalista anterior, puesto que en este caso el tamaño del contenedor utilizando esta base aumenta hasta `1.11GB`. Aunque no lo considere como una opción, a continuación se adjuntan sus resultados de las peticiones.
+Se trata de la versión completa del sistema operativo anterior **Debian 9**, el cual ha sido incluido en este estudio para destacar la considerable diferencia de tamaño con respecto a la versión minimalista anterior, puesto que en este caso el tamaño del contenedor utilizando esta base aumenta hasta `1.11 GB`. Aunque no lo considere como una opción, a continuación se adjuntan sus resultados de las peticiones.
 
 ![Stretch petfinder.](https://github.com/lidiasm/ProyectoCC/blob/master/docs/imgs/ab%20stretch%20conexi%C3%B3n.png)
 
@@ -37,7 +37,7 @@ Se trata de la versión completa del sistema operativo anterior **Debian 9**, el
 ### Alpine.
 
 Por último consideraremos este sistema base puesto que es uno de los más ligeros. Sin embargo, como mi proyecto utiliza la librería *pandas* y *Alpine* no dispone de herramientas de compilación para construir esta librería necesito utilizar una versión que de este sistema en la que ya se encuentre *pandas* instalada previamente. Para realizar las pruebas con este sistema he utilizado [esta imagen](https://hub.docker.com/r/quoinedev/python3.6-pandas-alpine). 
-El tamaño del contenedor al construirlo con esta versión base es de `664MB` y los resultados de las peticiones se presentan a continuación.
+El tamaño del contenedor al construirlo con esta versión base es de `664 MB` y los resultados de las peticiones se presentan a continuación.
 
 ![Alpine petfinder.](https://github.com/lidiasm/ProyectoCC/blob/master/docs/imgs/ab%20alpine%20conexi%C3%B3n.png)
 
@@ -64,7 +64,7 @@ Tal y como podemos comprobar en la tabla anterior el sistema base más rápido p
 Por otro lado procedo a mostrar también un resumen de los resultados obtenidos con cada uno de los sistemas operativos al realizar las peticiones al servicio REST *descargar_datos_mascotas*.
 
 | Sistema base. | Tiempo total. | Tiempo/petición en paralelo. | Peticiones/segundo. |
-| --- | --- | --- | --- | --- | --- | --- |
+| --- | --- | --- | --- |
 | Slim. | 92,537 s. | 0,925 s/petición | 1.08 peticiones/s |
 | Slim buster. | 113,139 s. | 1,131 s/petición | 0,88 peticiones/s |
 | Slim stretch. | 90,496 s. | 0,904 s/petición | 1,11 peticiones/s |
