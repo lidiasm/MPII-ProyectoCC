@@ -22,7 +22,9 @@ Tras la búsqueda de información acerca de las arquitecturas existentes he deci
 
 #### Lenguajes de programación y frameworks.
 
-Los microservicios se implementarán en **Python** y se comunicarán mediante *API RESTs* utilizando, para ello, el *framework* [**Flask**](https://www.flaskapi.org/). Asimismo se hará uso de la API Gateway [***Kong API Gateway***](https://konghq.com/solutions/gateway/) y como almacén de datos se utilizará **[MongoDB](https://dzone.com/articles/comparing-mongodb-amp-mysql)**. [Más información acerca de las herramientas.](https://github.com/lidiasm/ProyectoCC/blob/master/docs/lenguajes_y_herramientas.md)
+Los microservicios se implementarán en **Python** y se comunicarán mediante *API REST* utilizando, para ello, el *framework* [**Flask**](https://www.flaskapi.org/). Asimismo se hará uso de la API Gateway [***Kong API Gateway***](https://konghq.com/solutions/gateway/) y como almacén de datos se utilizará **[MongoDB](https://dzone.com/articles/comparing-mongodb-amp-mysql)**. 
+
+[Más información acerca de las herramientas.](https://github.com/lidiasm/ProyectoCC/blob/master/docs/lenguajes_y_herramientas.md)
 
 #### Servicios LOG y de configuración distribuida.
 
