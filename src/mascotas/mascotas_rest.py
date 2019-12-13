@@ -9,62 +9,50 @@ mascotas de la clase "Mascotas".
 @author: Lidia Sánchez Mérida
 """
 from flask import Flask, Response
-import mascotas
+from celery import Celery
 import json
-import os
+from mascotas_celery import descargar_mascotas
+import mascotas
 
+"""Configuramos Flask para que pueda conectarse con el microservicio de celery"""
 app = Flask(__name__)
+app.config['CELERY_BROKER_URL'] = 'pyamqp://guest@localhost//'
+app.config['CELERY_RESULT_BACKEND'] = 'rpc://'
+"""Iniciamos el servidor de Celery acorde a la configuración anterior de Flask."""
+celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])
+celery.conf.update(app.config)
+
+"""Objeto que nos conecta con la clase Mascotas."""
 m = mascotas.Mascotas()
 
 @app.route("/")
 def index():
-    return Response("Microservicio para recopilar datos de mascotas.", status=200)
-
-@app.route("/conectar_petfinder", methods=['GET'])
-def conectar_petfinder():
-    """Servicio REST para conectar con la API Petfinder. Para ello deberán
-    haberse definido, previamente, dos variables de entorno con la api key y
-    la api secret más la variable correspondiente al puerto donde se ejecutará Gunicorn.
-    Si las credenciales no son válidas devolverá el código 404 BAD REQUEST."""
-    puerto = os.environ.get("PORT")
-    if (puerto == None): os.environ["PORT"]='8000'
-    api_key = os.environ.get("API_KEY")
-    api_secret = os.environ.get("API_SECRET")
-    resultado = m.conectar_APIPetfinder(api_key, api_secret)
-    if (resultado == "Credenciales no válidas."): return Response(resultado, status=400)
-    else: return Response(resultado, status=200)
-    
-@app.route("/descargar_datos_mascotas", methods=['GET'])
-def descargar_datos_mascotas():
-    """Servicio REST que descarga datos de hasta 20 mascotas. Para ello,
-    previamente, se deberá haber realizado la conexión con la API.
-    Si no se ha realizado dicha conexion devolverá el código de error 400 BAD REQUEST.
-    """
-    resultado = m.descargar_datos_mascotas()
-    if (type(resultado) == str): return Response(json.dumps(resultado), status=400)
-    elif (type(resultado) == dict): return Response(json.dumps(resultado),
-          status=200, mimetype="application/json")
+    return Response("Microservicio REST para recopilar datos de mascotas.", status=200)
 
 @app.route("/obtener_mascotas", methods=['GET'])
 def obtener_mascotas():
-    """Servicio REST para obtener los datos de todas las mascotas.
+    """Servicio REST para obtener los datos de todas las mascotas descargados
+        por el microservicio de Celery.
         Si hay datos de mascotas los devuelve en formato diccionario.
         Si no devuelve el código 404 NOT FOUND.
     """
-    resultado = m.obtener_mascotas()
-    if (type(resultado) == dict): return Response(json.dumps(resultado),
-        status=200, mimetype="application/json")
+    mascotas = descargar_mascotas.apply()
+    #mascotas = resultado.wait()
+    if (type(mascotas.result) == dict and mascotas.status == 'SUCCESS'): 
+        return Response(json.dumps(mascotas.result), status=200, mimetype="application/json")
     else: return Response("Aún no existen datos de mascotas.", status=404)
 
 @app.route("/obtener_una_mascota/<int:id_mascota>", methods=['GET'])
-def obtener_mascota(id_mascota):
-    """ Servicio REST para obtener los datos de una mascota determinada en función
-    de su ID.
+def obtener_una_mascota(id_mascota):
+    """Servicio REST que obtiene los datos de una mascota determinada. Para ello
+        será necesario aportar un identificador válido.
         Si el ID de la mascota es correcto devolverá un diccionario con los datos
         de la mascota en cuestión.
         Si no devuelve el código 404 NOT FOUND.
     """
-    resultado = m.obtener_datos_mascota(id_mascota)
-    if (type(resultado) == str): return Response("No existe una mascota con el ID especificado.", status=404)
-    elif (type(resultado) == dict): return Response(json.dumps(resultado),
-          status=200, mimetype="application/json")
+    mascotas = descargar_mascotas.apply()
+    resultado = m.obtener_una_mascota(id_mascota, mascotas.result)
+    if (type(resultado) == dict): 
+        return Response(json.dumps(resultado), status=200, mimetype="application/json")
+    else:
+        return Response("No existe ninguna mascota con el identificador especificado.", status=404)
