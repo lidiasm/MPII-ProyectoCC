@@ -6,11 +6,15 @@ install:
 	
 test:
 	# Ejecuta los tests de la clase Mascotas y de la clase de su API REST.
-	pipenv run python -m pytest tests/test_mascotas.py tests/test_mascotas_rest.py
+	pipenv run python -m pytest tests/*
 	# Tests de covertura para la clase Mascotas y la clase de su API REST.
-	pipenv run python -m pytest --cov=mascotas --cov=mascotas_rest tests/
+	pipenv run python -m pytest --cov=mascotas --cov=conexion_api_petfinder --cov=mascotas_celery --cov=mascotas_rest tests/
 	
 start:
+	# Inicio del servidor de tareas Celery mediante la consola de Python. También
+	# se inicia el programador de tareas de Celery con --beat.
+	pipenv run python3 src/mascotas/mascotas_celery.py celery worker --beat
+	
 	# Inicio del servidor Green Unicorn. Para ello se realizan una serie de pasos:
 		# 1) Cambio al directorio del módulo "mascotas" donde se encuentran las clases
 		#			de la lógica de la aplicación y del microservicio.
@@ -28,5 +32,3 @@ stop:
 	# 	'kill', el cual solo necesita el identificador de un proceso para terminar su ejecución.
 	#		Como se comentaba anteriormente, este ID se encuentra en el fichero "pid_gunicorn.pid".
 	pipenv run kill `cat src/mascotas/pid_gunicorn.pid`
-
-	
