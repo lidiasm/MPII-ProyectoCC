@@ -57,34 +57,3 @@ def test_descargar_datos_mascotas_incorrecto():
     lista_mascotas.api_petfinder = None
     with pytest.raises(ConnectionError):
         assert lista_mascotas.descargar_datos_mascotas()
-
-
-
-#def test_obtener_mascota_sin_indice():
-#    """Test 1: obtener los datos de una mascota sin pasarle un índice."""
-#    nueva_mascota = ficha_mascota.FichaMascota("Kate", "Cat", "Pitbull", None,
-#        None, None, None, "adoptable", True, False, True, "Atlanta", "EEUU")
-#    lista_mascotas.aniadir_nueva_mascota(nueva_mascota)
-#    assert lista_mascotas.obtener_datos_mascota(None) == "Identificador de mascota inválido."
-#    
-#def test_obtener_mascota_indice_invalido():
-#    """Test 2: obtener los datos de una mascota con un índice inválido."""
-#    nueva_mascota = ficha_mascota.FichaMascota("Kate", "Cat", "Pitbull", None,
-#        None, None, None, "adoptable", True, False, True, "Atlanta", "EEUU")
-#    lista_mascotas.aniadir_nueva_mascota(nueva_mascota)
-#    assert lista_mascotas.obtener_datos_mascota(True) == "Identificador de mascota inválido."
-#    
-#def test_obtener_mascota_indice_invalido2():
-#    """Test 3: obtener los datos de una mascota con un índice mayor al número de elementos."""
-#    nueva_mascota = ficha_mascota.FichaMascota("Kate", "Cat", "Pitbull", None,
-#        None, None, None, "adoptable", True, False, True, "Atlanta", "EEUU")
-#    lista_mascotas.aniadir_nueva_mascota(nueva_mascota)
-#    assert lista_mascotas.obtener_datos_mascota(len(lista_mascotas.mascotas)) == "Identificador de mascota inválido."
-#    
-#def test_obtener_mascota_indice_correcto():
-#    """Test 4: obtener los datos de una mascota con un índice válido."""
-#    nueva_mascota = ficha_mascota.FichaMascota("Kate", "Cat", "Pitbull", None,
-#        None, None, None, "adoptable", True, False, True, "Atlanta", "EEUU")
-#    lista_mascotas.aniadir_nueva_mascota(nueva_mascota)
-#    assert isinstance(lista_mascotas.obtener_datos_mascota(0), dict) == True
-#    
