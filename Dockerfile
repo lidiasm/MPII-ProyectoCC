@@ -18,9 +18,14 @@ COPY docker_requirements.txt /tmp/
 # del fichero anterior.
 RUN apt-get update && pip install --upgrade pip && pip install --requirement /tmp/docker_requirements.txt
 
-# Copiamos los ficheros correspondientes al módulo "mascotas" y su microservicio
-# al directorio de trabajo.
-COPY src/mascotas/mascotas.py src/mascotas/ficha_mascota.py src/mascotas/mascotas_rest.py ./
+# Copiamos los ficheros correspondientes al módulo "mascotas" compuesto por las clases
+# Mascota, FichaMascota que contiene la estructura con los datos que nos interesan de las mascotas,
+# ConexionAPIPetfinder que se trata de una clase singleton para instanciar un único objeto con la conexión a la api.
+# Del mismo modo también copiamos el fichero del microservicio REST y el correspondiente al servidor de tareas Celery. 
+COPY src/mascotas/conexion_api_petfinder.py src/mascotas/mascotas.py src/mascotas/ficha_mascota.py src/mascotas/mascotas_rest.py src/mascotas/mascotas_celery.py ./
+
+# Iniciamos el servidor Celery del mismo modo que lo hacemos en el fichero makefile. 
+RUN python3 ./mascotas_celery.py celery worker --beat
 
 # Informamos acerca del puerto en el que se van a escuchar las peticiones.
 EXPOSE ${PORT}

@@ -13,8 +13,14 @@ from celery.decorators import periodic_task
 
 import mascotas
 """Creamos un objeto de la clase Mascotas cuyo constructor se encarga de inicializar
-la conxión con la API Petfinder."""
-m = mascotas.Mascotas()
+la conexión con la API Petfinder.
+
+Este bloque try-except evita que la excepción impida construir el contenedor al
+iniciar celery durante su construcción."""
+try:
+    m = mascotas.Mascotas()
+except:
+    print("No se ha podido establecer la conexión aún.")
 
 @periodic_task(run_every=(crontab(minute='*/1')), name="descargar_mascotas")
 def descargar_mascotas():
