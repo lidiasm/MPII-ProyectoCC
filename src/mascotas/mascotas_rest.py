@@ -13,7 +13,6 @@ from celery import Celery
 import json
 from mascotas_celery import descargar_mascotas
 import mascotas
-import requests
 
 """Configuramos Flask para que pueda conectarse con el microservicio de celery"""
 app = Flask(__name__)

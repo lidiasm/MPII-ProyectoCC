@@ -19,6 +19,7 @@ def test_obtener_mascotas():
         de Celery para mostrarlos."""
     respuesta = app.get('/obtener_mascotas')
     if (respuesta.status_code == 400):
+        """Número de peticiones a la API Petfinder superado."""
         assert (respuesta.status_code == 400)
     else:
         # Para acceder a los datos de la mascota devueltos -> respuesta.data
@@ -31,6 +32,7 @@ def test_obtener_una_mascota():
         su identificador correspondiente."""
     respuesta = app.get('/obtener_una_mascota/0')
     if (respuesta.status_code == 400):
+        """Número de peticiones a la API Petfinder superado."""
         assert (respuesta.status_code == 400)
     else:
         assert (respuesta.status_code == 200 and respuesta.headers["Content-Type"] == "application/json")
@@ -40,6 +42,7 @@ def test_obtener_una_mascota_incorrecto():
         aportando un identificador incorrecto."""
     respuesta = app.get('/obtener_una_mascota/-1')
     if (respuesta.status_code == 400):
+        """Número de peticiones a la API Petfinder superado."""
         assert (respuesta.status_code == 400)
     else:
         assert respuesta.status_code == 404
