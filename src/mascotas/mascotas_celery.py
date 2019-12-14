@@ -10,8 +10,9 @@ from celery import Celery
 app = Celery('mascotas_celery', broker='pyamqp://guest@localhost//', backend='rpc://')
 from celery.task.schedules import crontab
 from celery.decorators import periodic_task
-
 import mascotas
+import requests 
+
 """Creamos un objeto de la clase Mascotas cuyo constructor se encarga de inicializar
 la conexión con la API Petfinder.
 
@@ -26,4 +27,8 @@ except:
 def descargar_mascotas():
     """Descarga nuevos datos de viente mascotas siempre y cuando se haya realizado
     una conexión correcta con la API Petfinder."""
-    return m.descargar_datos_mascotas()
+    try:
+        return m.descargar_datos_mascotas()
+    except:
+        raise requests.exceptions.RequestException("Número de peticiones máximo excedido.")
+        #raise Exception(f'GET {descargar_mascotas} número de peticiones máximo excedido.') 
