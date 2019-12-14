@@ -9,6 +9,7 @@ Clase que contiene los datos de todas las mascotas disponibles en la API Petfind
 """
 import ficha_mascota
 from conexion_api_petfinder import ConexionAPIPetfinder
+import requests
 
 class Mascotas:
     
@@ -107,8 +108,8 @@ class Mascotas:
             mascotas_validadas = {}
             try:
                 mascotas = (self.api_petfinder).animals()
-            except:
-                raise ConnectionError("Error al intentar descargar los datos de mascotas.")
+            except RuntimeError:
+                raise requests.exceptions.RequestException("Número de peticiones máximo excedido.")
                 
             for mascota in mascotas['animals']:
                 nueva_mascota = ficha_mascota.FichaMascota(mascota['name'], mascota['type'], 

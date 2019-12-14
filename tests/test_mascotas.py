@@ -13,6 +13,7 @@ sys.path.append("src/mascotas")
 import mascotas 
 import ficha_mascota
 import pytest
+import requests
 
 lista_mascotas = mascotas.Mascotas()
 
@@ -47,13 +48,18 @@ def test_aniadir_nueva_mascota_datos_completos():
 def test_descargar_datos_mascotas():
     """Test 5: descargar datos de hasta veinte mascotas. Para ello se debe haber
         realizado una conexión con la API Petfinder previamente."""
-    resultado = lista_mascotas.descargar_datos_mascotas()
-    if (resultado != "Número de peticiones máximo excedido."):
+    try:
+        resultado = lista_mascotas.descargar_datos_mascotas()
         assert type(resultado == dict)
+    except requests.exceptions.RequestException:
+        print("Número de peticiones máximas excedido.")
     
 def test_descargar_datos_mascotas_incorrecto():
     """Test 6: intento fallido de descargar nuevos datos de mascotas. Para ello
         anulamos la conexión realizada con la API Petfinder."""
     lista_mascotas.api_petfinder = None
-    with pytest.raises(ConnectionError):
-        assert lista_mascotas.descargar_datos_mascotas()
+    try:
+        with pytest.raises(ConnectionError):
+            assert lista_mascotas.descargar_datos_mascotas()
+    except requests.exceptions.RequestException:
+        print("Número de peticiones máximas excedido.")

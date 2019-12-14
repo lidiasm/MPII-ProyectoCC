@@ -13,6 +13,7 @@ from celery import Celery
 import json
 from mascotas_celery import descargar_mascotas
 import mascotas
+import requests
 
 """Configuramos Flask para que pueda conectarse con el microservicio de celery"""
 app = Flask(__name__)
@@ -36,11 +37,12 @@ def obtener_mascotas():
         Si hay datos de mascotas los devuelve en formato diccionario.
         Si no devuelve el código 404 NOT FOUND.
     """
-    mascotas = descargar_mascotas.apply()
-    #mascotas = resultado.wait()
-    if (type(mascotas.result) == dict and mascotas.status == 'SUCCESS'): 
+    try:
+        mascotas = descargar_mascotas.apply()
+        #mascotas = resultado.wait()
         return Response(json.dumps(mascotas.result), status=200, mimetype="application/json")
-    else: return Response("Aún no existen datos de mascotas.", status=404)
+    except Exception: 
+        return Response("Número de peticiones máximo excedido.", status=400)
 
 @app.route("/obtener_una_mascota/<int:id_mascota>", methods=['GET'])
 def obtener_una_mascota(id_mascota):
@@ -50,9 +52,12 @@ def obtener_una_mascota(id_mascota):
         de la mascota en cuestión.
         Si no devuelve el código 404 NOT FOUND.
     """
-    mascotas = descargar_mascotas.apply()
-    resultado = m.obtener_una_mascota(id_mascota, mascotas.result)
-    if (type(resultado) == dict): 
-        return Response(json.dumps(resultado), status=200, mimetype="application/json")
-    else:
-        return Response("No existe ninguna mascota con el identificador especificado.", status=404)
+    try:
+        mascotas = descargar_mascotas.apply()
+        resultado = m.obtener_una_mascota(id_mascota, mascotas.result)
+        if (type(resultado) == dict): 
+            return Response(json.dumps(resultado), status=200, mimetype="application/json")
+        else:
+            return Response("No existe ninguna mascota con el identificador especificado.", status=404)
+    except Exception:
+        return Response("Número de peticiones máximo excedido.", status=400)
