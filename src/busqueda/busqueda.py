@@ -43,7 +43,7 @@ class Busqueda:
            'de búsqueda con un valor.') 
         
         """Comprobamos si existen mascotas."""
-        if (len(mascotas) == 0): raise PetsNotFound('No hay mascotas sobre las que realizar la búsqueda.')
+        if (len(mascotas) == 0 or type(mascotas) != dict): raise PetsNotFound('No hay mascotas sobre las que realizar la búsqueda.')
         """Búsqueda de mascotas."""
         resultado = {}
         ID = 0
