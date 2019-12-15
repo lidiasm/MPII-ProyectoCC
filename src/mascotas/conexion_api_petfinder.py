@@ -1,22 +1,25 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Thu Dec 12 21:25:49 2019
-
 Clase singleton para realizar una única conexión con la API Petfinder.
 
 @author: Lidia Sánchez Mérida
 """
+import sys
 import petpy
 import os
+sys.path.append("../")
+from excepciones import OneInstanceConexionAPIPetfinder, ApiPetfinderConnectionError
 
 class ConexionAPIPetfinder:
     __instance = None
     
     def __init__(self):
       """Crear la única instancia de esta clase."""
-      if ConexionAPIPetfinder.__instance != None: raise Exception("Ya existe una instancia de esta clase singleton.")
-      else: return ConexionAPIPetfinder.__instance
+      if ConexionAPIPetfinder.__instance != None: 
+          raise OneInstanceConexionAPIPetfinder("Ya existe una instancia de esta clase singleton.")
+      else: 
+          return ConexionAPIPetfinder.__instance
     
     @staticmethod 
     def getInstance():
@@ -33,11 +36,11 @@ class ConexionAPIPetfinder:
         """Comprobamos las credenciales"""
         if (api_key == None or isinstance(api_key, str) == False or
             api_secret == None or isinstance(api_secret, str) == False):
-            raise ConnectionError("Credenciales no válidas.")
+            raise ApiPetfinderConnectionError("Credenciales no válidas.")
       
         """Conectamos con la API Petfinder."""
         try:
             ConexionAPIPetfinder.__instance = petpy.Petfinder(api_key, api_secret)
             return ConexionAPIPetfinder.__instance
         except petpy.exceptions.PetfinderInvalidCredentials:
-            raise ConnectionError("Credenciales no válidas.")
+            raise ApiPetfinderConnectionError("Credenciales no válidas.")

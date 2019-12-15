@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sat Nov  9 12:27:19 2019
-
 Clase para testear las funciones de la clase Mascotas.
 
 @author: Lidia Sánchez Mérida
@@ -10,10 +8,10 @@ Clase para testear las funciones de la clase Mascotas.
 
 import sys
 sys.path.append("src/mascotas")
+sys.path.append("src/")
 import mascotas 
-import ficha_mascota
 import pytest
-import requests
+from excepciones import WrongPetIndex, MaxPetfinderRequestsExceeded
 
 lista_mascotas = mascotas.Mascotas()
 
@@ -33,15 +31,21 @@ def test_comprobar_variable_incorrecta():
 
 def test_aniadir_nueva_mascota_datos_incompletos():
     """Test 3: añadir una nueva mascota con datos inválidos."""
-    nueva_mascota = ficha_mascota.FichaMascota("Sussi", None, "Pitbull", None,
-        None, None, None, "adoptable", True, False, "False", "Granada", "España")
+    nueva_mascota = {'nombre': 'Sussi', 'tipo_animal': None, 'raza': 'Pitbull', 
+        'tamanio': None, 'genero': None, 'edad': None, 'tipo_pelaje': None, 
+        'estado': 'adoptable', 'ninios': True, 'gatos': False, 'perros': 'False', 
+        'ciudad': 'Granada', 'pais': 'España'
+    }
     mascota_aniadida = lista_mascotas.aniadir_nueva_mascota(nueva_mascota)
     assert type(mascota_aniadida) == dict
 
 def test_aniadir_nueva_mascota_datos_completos():
     """Test 4: añadir una nueva mascota con todos sus datos válidos."""
-    nueva_mascota = ficha_mascota.FichaMascota("Kitty", "Cat", "Angora", "Medium",
-        "Female", "Adult", "Large", "adoptable", True, False, False, "New York", "EEUU")
+    nueva_mascota = {'nombre': 'Sussi', 'tipo_animal': None, 'raza': 'Pitbull', 
+        'tamanio': None, 'genero': None, 'edad': None, 'tipo_pelaje': None, 
+        'estado': 'adoptable', 'ninios': True, 'gatos': False, 'perros': 'False', 
+        'ciudad': 'Granada', 'pais': 'España'
+    }
     mascota_aniadida = lista_mascotas.aniadir_nueva_mascota(nueva_mascota)
     assert type(mascota_aniadida) == dict
 
@@ -51,7 +55,7 @@ def test_descargar_datos_mascotas():
     try:
         resultado = lista_mascotas.descargar_datos_mascotas()
         assert type(resultado == dict)
-    except requests.exceptions.RequestException:
+    except MaxPetfinderRequestsExceeded:
         print("Número de peticiones máximas excedido.")
     
 def test_descargar_datos_mascotas_incorrecto():
@@ -59,7 +63,7 @@ def test_descargar_datos_mascotas_incorrecto():
         anulamos la conexión realizada con la API Petfinder."""
     lista_mascotas.api_petfinder = None
     try:
-        with pytest.raises(ConnectionError):
+        with pytest.raises(WrongPetIndex):
             assert lista_mascotas.descargar_datos_mascotas()
-    except requests.exceptions.RequestException:
+    except MaxPetfinderRequestsExceeded:
         print("Número de peticiones máximas excedido.")

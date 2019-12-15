@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sun Nov 24 20:45:55 2019
-
 Tests para el servicio REST que accede a los métodos de obtener_mascota y 
 obtener_mascotas de la clase Mascota.
 

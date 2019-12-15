@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sun Nov 24 20:11:09 2019
-
 Clase que representa el microservicio REST por el que acceder a los datos de las
 mascotas de la clase "Mascotas".
 
