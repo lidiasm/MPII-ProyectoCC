@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Thu Nov 28 23:51:34 2019
-
 Tests para el servidor de tareas Celery que se encarga de conectar con la API Petfinder
 y descargar los datos de hasta 20 mascotas.
 
