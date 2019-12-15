@@ -8,11 +8,12 @@ test:
 	# Ejecuta los tests de la clase Mascotas y de la clase de su API REST.
 	pipenv run python -m pytest tests/*
 	# Tests de covertura para la clase Mascotas y la clase de su API REST.
-	pipenv run python -m pytest --cov=mascotas --cov=conexion_api_petfinder --cov=mascotas_celery --cov=mascotas_rest tests/
+	pipenv run python -m pytest --cov=mascotas --cov=conexion_api_petfinder --cov=mascotas_celery --cov=mascotas_rest --cov=busqueda tests/
 	
 start:
-	# Inicio del servidor de tareas Celery mediante la consola de Python. También
-	# se inicia el programador de tareas de Celery con --beat.
+	# Inicio del servidor de tareas Celery mediante la consola de Python. 
+	# Con la opción --beat iniciamos también el programador de tareas de Celery parar
+	# ejecutar las tareas periódicas.
 	pipenv run python3 src/mascotas/mascotas_celery.py celery worker --beat
 	
 	# Inicio del servidor Green Unicorn. Para ello se realizan una serie de pasos:
@@ -25,10 +26,12 @@ start:
 		# 4) Con la opción "-b" especificamos el puerto en el que se atenderán las peticiones.
 		#			Por razones de seguridad este puerto se establecerá mediante una variable de entorno que deberá 
 		#			estar creada antes de ejecutar esta orden.
-	pipenv run gunicorn --chdir src/mascotas/ mascotas_rest:app -p pid_gunicorn.pid -D -b :${PORT}
+	pipenv run gunicorn --chdir src/mascotas/ mascotas_rest:app -p pid_gunicorn.pid -D -b :${PORT1}
+	pipenv run gunicorn --chdir src/busqueda/ busqueda_rest:app -p pid_gunicorn.pid -D -b :${PORT2}  
 
 stop:
 	# Fin de la ejecución del proceso asociado al servidor Gunicorn. Para ello se hará uso del comando 
 	# 	'kill', el cual solo necesita el identificador de un proceso para terminar su ejecución.
 	#		Como se comentaba anteriormente, este ID se encuentra en el fichero "pid_gunicorn.pid".
 	pipenv run kill `cat src/mascotas/pid_gunicorn.pid`
+	pipenv run kill `cat src/busqueda/pid_gunicorn.pid`
