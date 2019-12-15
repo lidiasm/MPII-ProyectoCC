@@ -23,9 +23,9 @@ start:
 		# 		asociado al servidor. Esto nos será de utilidad cuando deseemos terminar su ejecución sin 
 		# 		utilizar un gestor de procesos adicional.
 		# 3) Con la opción "-D" evitamos que el terminal se quede bloqueado por la ejecución del servidor.
-		# 4) Con la opción "-b" especificamos el puerto en el que se atenderán las peticiones.
-		#			Por razones de seguridad este puerto se establecerá mediante una variable de entorno que deberá 
-		#			estar creada antes de ejecutar esta orden.
+		# 4) Con la opción "-b" especificamos los puertos en los que se atenderán las peticiones.
+		#			Por razones de seguridad estos puertos se establecerán mediante variables de entorno que deberán 
+		#			estar creadas antes de iniciar los microservicios REST.
 	pipenv run gunicorn --chdir src/mascotas/ mascotas_rest:app -p pid_gunicorn.pid -D -b :${PORT1}
 	pipenv run gunicorn --chdir src/busqueda/ busqueda_rest:app -p pid_gunicorn.pid -D -b :${PORT2}  
 

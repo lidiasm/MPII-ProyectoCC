@@ -22,13 +22,15 @@ RUN apt-get update && pip install --upgrade pip && pip install --requirement /tm
 # Mascota, FichaMascota que contiene la estructura con los datos que nos interesan de las mascotas,
 # ConexionAPIPetfinder que se trata de una clase singleton para instanciar un único objeto con la conexión a la api.
 # Del mismo modo también copiamos el fichero del microservicio REST y el correspondiente al servidor de tareas Celery. 
-COPY src/mascotas/conexion_api_petfinder.py src/mascotas/mascotas.py src/mascotas/ficha_mascota.py src/mascotas/mascotas_rest.py src/mascotas/mascotas_celery.py ./
+COPY src/excepciones.py src/mascotas/conexion_api_petfinder.py src/mascotas/mascotas.py src/mascotas/mascotas_rest.py src/mascotas/mascotas_celery.py ./
 
-# Iniciamos el servidor Celery del mismo modo que lo hacemos en el fichero makefile. 
-RUN python3 ./mascotas_celery.py celery worker --beat
+# Iniciamos el servidor Celery desde el intérprete de Python 3 e iniciamos también su scheduled que nos 
+# permitirá ejecutar tareas periódicas, como descargar datos de mascotas. Asimismo le indicamos que 
+# podrá atender hasta 10 tareas de forma concurrente.
+RUN python3 ./mascotas_celery.py celery worker --beat --concurrency=10
 
 # Informamos acerca del puerto en el que se van a escuchar las peticiones.
 EXPOSE ${PORT}
 
-# Ejecutamos el servidor Gunicorn estableciendo como puerto el anterior.
-CMD gunicorn -b 0.0.0.0:${PORT} mascotas_rest:app
+# Ejecutamos diez copias del servidor Gunicorn estableciendo como puerto el anterior.
+CMD gunicorn -w 10 -b 0.0.0.0:${PORT} mascotas_rest:app
