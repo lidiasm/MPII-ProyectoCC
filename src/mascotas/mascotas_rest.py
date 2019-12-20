@@ -36,10 +36,16 @@ def obtener_mascotas():
     """
     try:
         mascotas = descargar_mascotas.apply()
-        #mascotas = resultado.wait()
+        #tarea = descargar_mascotas.apply_async(countdown=60)
+        #print(tarea)
+        #mascotas = tarea.get()
+        #if (mascotas == None):
+         #   return Response("No existen datos de mascotas aún. Espere....", status=200)
+        #print(mascotas)
+        #else:
         return Response(json.dumps(mascotas.result), status=200, mimetype="application/json")
     except Exception: 
-        return Response("Número de peticiones máximo excedido.", status=400)
+        return Response("Gunicorn: Número de peticiones máximo excedido.", status=400)
 
 @app.route("/obtener_una_mascota/<int:id_mascota>", methods=['GET'])
 def obtener_una_mascota(id_mascota):
