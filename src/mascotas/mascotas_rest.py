@@ -7,60 +7,68 @@ mascotas de la clase "Mascotas".
 @author: Lidia Sánchez Mérida
 """
 from flask import Flask, Response
-from celery import Celery
+from flask_caching import Cache
 import json
-from mascotas_celery import descargar_mascotas
 import mascotas
+import sys
+sys.path.append("src")
+from excepciones import EmptyCollection, WrongPetIndex
+import os
+import mongodb
 
 """Configuramos Flask para que pueda conectarse con el microservicio de celery"""
 app = Flask(__name__)
-app.config['CELERY_BROKER_URL'] = 'pyamqp://guest@localhost//'
-app.config['CELERY_RESULT_BACKEND'] = 'rpc://'
-"""Iniciamos el servidor de Celery acorde a la configuración anterior de Flask."""
-celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])
-celery.conf.update(app.config)
+"""Añadimos caché para comprobar si mejoran las prestaciones."""
+app.config["CACHE_DEFAULT_TIMEOUT"] = 36000
+app.config['CACHE_TYPE'] = 'simple'
+cache = Cache(app)
 
+"""Creamos un objeto de la base de datos y lo configuramos."""
+bd = mongodb.MongoDB(os.environ.get("MONGODB_URI"), 'PetfinderBD', 'mascotas')
 """Objeto que nos conecta con la clase Mascotas."""
-m = mascotas.Mascotas()
+m = mascotas.Mascotas(bd)
 
 @app.route("/")
 def index():
     return Response("Microservicio REST para recopilar datos de mascotas.", status=200)
 
 @app.route("/obtener_mascotas", methods=['GET'])
+@cache.cached()
 def obtener_mascotas():
-    """Servicio REST para obtener los datos de todas las mascotas descargados
-        por el microservicio de Celery.
-        Si hay datos de mascotas los devuelve en formato diccionario.
+    """Servicio REST que obtiene los datos de todas las mascotas que préviamente
+        han sido descargados por el microservicio periódico de Celery. Para ello
+        accede a la base de datos mongodb, que es donde se almacenan dichos datos
+        como caché y los devuelve, si estos existen, en formato JSON.
         Si no devuelve el código 404 NOT FOUND.
     """
     try:
-        mascotas = descargar_mascotas.apply()
-        #tarea = descargar_mascotas.apply_async(countdown=60)
-        #print(tarea)
-        #mascotas = tarea.get()
-        #if (mascotas == None):
-         #   return Response("No existen datos de mascotas aún. Espere....", status=200)
-        #print(mascotas)
-        #else:
-        return Response(json.dumps(mascotas.result), status=200, mimetype="application/json")
-    except Exception: 
-        return Response("Gunicorn: Número de peticiones máximo excedido.", status=400)
+        mascotas = m.obtener_mascotas()
+        return Response(json.dumps(mascotas), status=200, mimetype="application/json")
+    except EmptyCollection:
+        return Response("REST: No existen datos de mascotas aún.", status=400)
+#    try:
+#        tarea = descargar_mascotas.apply_async()
+#        mascotas = tarea.get()
+#        if (mascotas == None):
+#            return Response("No existen datos de mascotas aún. Espere....", status=200)
+#        else:
+#            return Response(json.dumps(mascotas), status=200, mimetype="application/json")
+#    except MaxPetfinderRequestsExceeded: 
+#        return Response("Gunicorn: Número de peticiones máximo excedido.", status=400)
 
-@app.route("/obtener_una_mascota/<int:id_mascota>", methods=['GET'])
+@app.route("/obtener_una_mascota/<string:id_mascota>", methods=['GET'])
+@cache.cached()
 def obtener_una_mascota(id_mascota):
     """Servicio REST que obtiene los datos de una mascota determinada. Para ello
         será necesario aportar un identificador válido.
         Si el ID de la mascota es correcto devolverá un diccionario con los datos
-        de la mascota en cuestión.
+        de la mascota en cuestión obtenido desde la base de datos que funciona como caché.
         Si no devuelve el código 404 NOT FOUND.
     """
     try:
-        mascotas = descargar_mascotas.apply()
-        resultado = m.obtener_una_mascota(id_mascota, mascotas.result)
-        if (type(resultado) == dict): 
-            return Response(json.dumps(resultado), status=200, mimetype="application/json")
-        else:
-            return Response("No existe ninguna mascota con el identificador especificado.", status=404)
-    except Exception:
-        return Response("Número de peticiones máximo excedido.", status=400)
+        mascota = m.obtener_una_mascota(id_mascota)
+        return Response(json.dumps(mascota), status=200, mimetype="application/json")
+    except EmptyCollection:
+        return Response("REST: No se han recopilado datos de mascotas aún.", status=400)
+    except WrongPetIndex:
+        return Response("REST: No existe una mascota con el índice especificado.", status=404)

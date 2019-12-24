@@ -6,14 +6,18 @@ Clase para testear las funciones de la clase Mascotas.
 @author: Lidia Sánchez Mérida
 """
 
+import os
 import sys
-sys.path.append("src/mascotas")
-sys.path.append("src/")
-import mascotas 
 import pytest
+sys.path.append("src/mascotas")
+import mascotas 
+sys.path.append("src")
 from excepciones import WrongPetIndex, MaxPetfinderRequestsExceeded
-
-lista_mascotas = mascotas.Mascotas()
+sys.path.append("src")
+from mongodb import MongoDB
+"""Creamos la conexión para la base de datos."""
+bd = MongoDB(os.environ.get("MONGODB_URI"), 'PetfinderBD', 'mascotas')
+lista_mascotas = mascotas.Mascotas(bd)
 
 def test_comprobar_variable_correcta():
     """Test 1: comprobación del tipo y el valor de una variable."""
@@ -31,7 +35,7 @@ def test_comprobar_variable_incorrecta():
 
 def test_aniadir_nueva_mascota_datos_incompletos():
     """Test 3: añadir una nueva mascota con datos inválidos."""
-    nueva_mascota = {'nombre': 'Sussi', 'tipo_animal': None, 'raza': 'Pitbull', 
+    nueva_mascota = {'id':'10','nombre': 'Sussi', 'tipo_animal': None, 'raza': 'Pitbull', 
         'tamanio': None, 'genero': None, 'edad': None, 'tipo_pelaje': None, 
         'estado': 'adoptable', 'ninios': True, 'gatos': False, 'perros': 'False', 
         'ciudad': 'Granada', 'pais': 'España'
@@ -41,7 +45,7 @@ def test_aniadir_nueva_mascota_datos_incompletos():
 
 def test_aniadir_nueva_mascota_datos_completos():
     """Test 4: añadir una nueva mascota con todos sus datos válidos."""
-    nueva_mascota = {'nombre': 'Sussi', 'tipo_animal': None, 'raza': 'Pitbull', 
+    nueva_mascota = {'id':'11', 'nombre': 'Sussi', 'tipo_animal': None, 'raza': 'Pitbull', 
         'tamanio': None, 'genero': None, 'edad': None, 'tipo_pelaje': None, 
         'estado': 'adoptable', 'ninios': True, 'gatos': False, 'perros': 'False', 
         'ciudad': 'Granada', 'pais': 'España'
@@ -56,7 +60,7 @@ def test_descargar_datos_mascotas():
         resultado = lista_mascotas.descargar_datos_mascotas()
         assert type(resultado == dict)
     except MaxPetfinderRequestsExceeded:
-        print("Número de peticiones máximas excedido.")
+        print("Número de peticiones máximo excedido.")
     
 def test_descargar_datos_mascotas_incorrecto():
     """Test 6: intento fallido de descargar nuevos datos de mascotas. Para ello
@@ -66,4 +70,4 @@ def test_descargar_datos_mascotas_incorrecto():
         with pytest.raises(WrongPetIndex):
             assert lista_mascotas.descargar_datos_mascotas()
     except MaxPetfinderRequestsExceeded:
-        print("Número de peticiones máximas excedido.")
+        print("Número de peticiones máximo excedido.")

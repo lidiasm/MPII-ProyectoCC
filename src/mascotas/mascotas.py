@@ -6,16 +6,18 @@ Clase que contiene los datos de todas las mascotas disponibles en la API Petfind
 @author: Lidia Sánchez Mérida
 """
 import sys
-sys.path.append("src/")
+sys.path.append("src")
 from conexion_api_petfinder import ConexionAPIPetfinder
-from excepciones import MaxPetfinderRequestsExceeded, WrongPetIndex
+from excepciones import MaxPetfinderRequestsExceeded, WrongPetIndex, EmptyCollection
 
 class Mascotas:
     
-    def __init__(self):
+    def __init__(self, mongodb):
         """Constructor. En él se genera una variable de instancia en la que 
-            se almacena la conexión con la API Petfinder."""
+            se almacena la conexión con la API Petfinder.
+            Añadimos inyección de dependencias para trabajar con la base de datos."""
         self.api_petfinder = ConexionAPIPetfinder.conectarConPetfinder()
+        self.mongodb = mongodb
     
     def variable_correcta(self, variable, tipo):
         """Comprueba el tipo y el valor de una variable."""
@@ -91,7 +93,10 @@ class Mascotas:
         if not (check_pais) :
             nueva_mascota['pais'] = "DNV"
             datos_no_validos += 1
-            
+        
+        """Añadimos la nueva mascota a la base de datos si no existía préviamente."""
+        self.mongodb.insertar_elemento(nueva_mascota)
+        
         return nueva_mascota
 
     def descargar_datos_mascotas(self):
@@ -110,6 +115,7 @@ class Mascotas:
                 
             for mascota in mascotas['animals']:
                 nueva_mascota = {
+                        'id':str(mascota['id']),
                         'nombre': mascota['name'], 
                         'tipo_animal': mascota['type'], 
                         'raza': mascota['breeds']['primary'], 
@@ -125,17 +131,29 @@ class Mascotas:
                         'pais': mascota['contact']['address']['country']
                    }
                 mascota_validada = self.aniadir_nueva_mascota(nueva_mascota)
-                
                 """Devolvemos las mascotas con los datos validados."""
                 mascotas_validadas[id_mascota_validada] = mascota_validada
                 id_mascota_validada += 1
                 
             return mascotas_validadas
     
-    def obtener_una_mascota(self, indice, mascotas):
-        """Método encargado de devolver los datos de una mascota en particular,
-            si el identificador es válido."""
-        if indice == None or type(indice) != int or (indice in mascotas) == False:
+    def obtener_una_mascota(self, identificador):
+        """Método que devuelve los datos de una mascota concreta especificando,
+            para ello, su identificador válido. Si existen mascotas en la base de
+            datos y encuentra la mascota en particular, devuelve sus datos."""
+        if (self.mongodb.tam_coleccion() == 0): 
+            raise EmptyCollection('No existen datos de mascotas.')
+            
+        if identificador == None:
             raise WrongPetIndex("No existe ninguna mascota con el identificador especificado.")
-
-        return mascotas[indice]
+        
+        """Recuperamos los datos de la mascota en cuestión si existe."""
+        mascota = self.mongodb.get_elemento('id', identificador)
+        if (mascota == None): raise WrongPetIndex("No existe ninguna mascota con el identificador especificado.")
+        return mascota
+    
+    def obtener_mascotas(self):
+        """Método que devuelve los datos de todas las mascotas."""
+        mascotas = self.mongodb.get_coleccion()
+        if (mascotas == None): raise EmptyCollection('No existen datos de mascotas.')
+        return mascotas

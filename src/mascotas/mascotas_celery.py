@@ -7,14 +7,19 @@ los datos de hasta veinte mascotas.
 @author: Lidia Sánchez Mérida
 """
 
+import os
 from celery import Celery
-app = Celery('mascotas_celery', broker='pyamqp://guest@localhost//', backend='rpc://')
+app = Celery('mascotas_celery', broker='redis://guest@localhost//', backend='redis://')
 from celery.task.schedules import crontab
 from celery.decorators import periodic_task
 import mascotas
 import sys
-sys.path.append("src/")
+sys.path.append("src")
 from excepciones import MaxPetfinderRequestsExceeded 
+from mongodb import MongoDB
+
+"""Creamos un objeto de la base de datos y lo configuramos."""
+bd = MongoDB(os.environ.get("MONGODB_URI"), 'PetfinderBD', 'mascotas')
 
 """Creamos un objeto de la clase Mascotas cuyo constructor se encarga de inicializar
 la conexión con la API Petfinder.
@@ -22,7 +27,7 @@ la conexión con la API Petfinder.
 Este bloque try-except evita que la excepción impida construir el contenedor al
 iniciar celery durante su construcción."""
 try:
-    m = mascotas.Mascotas()
+    m = mascotas.Mascotas(bd)
 except:
     print("No se ha podido establecer la conexión aún.")
 
@@ -33,4 +38,4 @@ def descargar_mascotas():
     try:
         return m.descargar_datos_mascotas()
     except:
-        raise MaxPetfinderRequestsExceeded("Número de peticiones máximo excedido.")
+        raise MaxPetfinderRequestsExceeded("Celery: número de peticiones máximo excedido.")

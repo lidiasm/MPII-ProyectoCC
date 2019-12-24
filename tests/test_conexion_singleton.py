@@ -10,7 +10,7 @@ import os
 import pytest
 import sys
 sys.path.append("src/mascotas")
-sys.path.append("src/")
+sys.path.append("src")
 from conexion_api_petfinder import ConexionAPIPetfinder, ApiPetfinderConnectionError, OneInstanceConexionAPIPetfinder
 
 def test_comprobar_clase_singleton():
