@@ -11,3 +11,6 @@ jobs:
       - run:
           name: Ejecutar los tests.
           command: make test
+machine:
+  services:
+    - mongodb
