@@ -48,4 +48,25 @@ class WrongSearchParametersValues(Exception):
     búsqueda debe de tener un valor."""
     def __init__(self, mensaje):
         self.mensaje = mensaje
-    
+
+class CollectionNotFound(Exception):
+    """Clase específica para indicar que no se realizado una conexión correcta
+        con la base de datos."""
+    def __init__(self, mensaje):
+        self.mensaje = mensaje
+        
+class NewItemNotFound(Exception):
+    """Clase específica para indicar que el elemento a insertar en la colección
+        no existe."""
+    def __init__(self, mensaje):
+        self.mensaje = mensaje
+
+class ItemNotFound(Exception):
+    """Clase específica para indicar que el elemento buscado no existe."""
+    def __init__(self, mensaje):
+        self.mensaje = mensaje
+        
+class EmptyCollection(Exception):
+    """Clase específica para indicar que no existen registros en la colección."""
+    def __init__(self, mensaje):
+        self.mensaje = mensaje
