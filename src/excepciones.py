@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Clase de excepciones específicas para el proyecto en cuestión. Por defecto,
+Clase de excepciones específicas para el proyecto. Por defecto,
 todas las clases heredarán de la clase Exception de Python y se les podrá
 agregar un mensaje informativo.
 
@@ -51,13 +51,13 @@ class WrongSearchParametersValues(Exception):
 
 class CollectionNotFound(Exception):
     """Clase específica para indicar que no se realizado una conexión correcta
-        con la base de datos."""
+    con la base de datos."""
     def __init__(self, mensaje):
         self.mensaje = mensaje
         
 class NewItemNotFound(Exception):
     """Clase específica para indicar que el elemento a insertar en la colección
-        no existe."""
+    no existe."""
     def __init__(self, mensaje):
         self.mensaje = mensaje
 
