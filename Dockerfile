@@ -7,6 +7,7 @@ LABEL maintainer="Lidia Sánchez lidiasm96@correo.ugr.es"
 # Pasamos el puerto al que debe conectarse Gunicorn estableciendo, para ello,
 # una variable de entorno para que persista tras la construcción del contenedor.
 ENV PORT ${PORT}
+ENV MONGODB_URI ${MONGODB_URI}
 
 # Establecemos el directorio de trabajo del proyecto.
 WORKDIR Escritorio/CC/ProyectoCC
@@ -31,4 +32,4 @@ RUN python3 ./mascotas_celery.py celery worker --beat --autoscale=20,10
 EXPOSE ${PORT}
 
 # Ejecutamos el microservicio REST en diez copias del servidor Gunicorn de forma asíncrona.
-CMD gunicorn --workers=10 -b 0.0.0.0:${PORT} mascotas_rest:app
+CMD gunicorn --worker-class=gevent --worker-connections=1000 --workers=10 -b 0.0.0.0:${PORT} mascotas_rest:app
