@@ -56,6 +56,10 @@ En relación a las herramientas de despliegue simplemente se ha añadido la clas
 * Una vez establecida esta configuración podemos crear la base de datos, que en mi caso se denomina *Petfinder* así como un usuario para acceder a ella.
 * Por último podremos crear en dicho almacén de datos una colección donde almacenar las mascotas, que en mi caso se llama *mascotas*.
 
+Al finalizar el proceso podemos comprobar en la siguiente captura el estado de la base de datos remota que ha sido creada junto con la única colección que se ha registrado.
+
+![MongoDB Atlas.](https://github.com/lidiasm/ProyectoCC/blob/master/docs/imgs/MongoDB%20Atlas.png)
+
 Tras crear y configurar el almacén de datos basta con obtener la *URI* de la base de datos remota y añadirla como variable de entorno a **Heroku** mediante su interfaz dentro de la opción *Settings/Config Vars*. Por último, se han añadido las dependencias necesarias para instalar la librería *pymongo* en el fichero `docker_requirements.txt` de modo que en todas las futuras construcciones del contenedor se instalen las librerías necesarias para ejecutar el microservicio.
 
 #### Medición de prestaciones.
