@@ -29,7 +29,7 @@ iniciar celery durante su construcción."""
 try:
     m = mascotas.Mascotas(bd)
 except:
-    print("No se ha podido establecer la conexión aún.")
+    print("No se ha podido establecer la conexión con la API Petfinder aún.")
 
 @periodic_task(run_every=(crontab(hour='*/23')), name="descargar_mascotas")
 def descargar_mascotas():
