@@ -1,5 +1,9 @@
 petpy
 gunicorn
 Flask
+Flask-Caching
 Celery
-rabbitmq
+redis
+gevent
+pymongo
+dnspython
