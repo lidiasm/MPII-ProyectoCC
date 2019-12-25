@@ -8,7 +8,7 @@ cumplan con los términos buscados.
 @author: Lidia Sánchez Mérida.
 """
 import sys
-sys.path.append("src/")
+sys.path.append("src")
 from excepciones import WrongNumberSearchParameters, WrongSearchParametersValues, PetsNotFound
 
 class Busqueda:

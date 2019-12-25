@@ -7,9 +7,9 @@ Tests para la clase Búsqueda.
 """
 import sys
 sys.path.append("src/busqueda")
-sys.path.append("src/")
 import busqueda 
 import pytest
+sys.path.append("src")
 from excepciones import WrongNumberSearchParameters, PetsNotFound, WrongSearchParametersValues
 
 busquedas = busqueda.Busqueda()
