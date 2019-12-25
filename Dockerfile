@@ -20,7 +20,7 @@ COPY docker_requirements.txt /tmp/
 RUN apt-get update && pip install --upgrade pip && pip install --requirement /tmp/docker_requirements.txt
 
 # Copiamos los ficheros correspondientes al módulo Mascotas, la base de datos y
-# los servicios RESTs y Celery.
+# los microservicios en Celery y Flask.
 COPY src/mongodb.py src/excepciones.py src/mascotas/conexion_api_petfinder.py src/mascotas/mascotas.py src/mascotas/mascotas_rest.py src/mascotas/mascotas_celery.py ./
 
 # Iniciamos el servidor de tareas Celery, en particular, el microservicio encargado de recopilar
