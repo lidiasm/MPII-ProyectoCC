@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 """
 Clase encargada de realizar las operaciones necesarias con la base de datos
-establecida para el proyecto.
+establecida para el proyecto. Esta clase será común a todas las operaciones
+de las clases de la lógica de la aplicación.
 
 @author: Lidia Sánchez Mérida.
 """
