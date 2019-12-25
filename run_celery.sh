@@ -9,4 +9,4 @@ cd src/mascotas/
 # concurrentes, especificamos este mismo número.
 # Por último, mediante el argumento "--loglevel=info" podremos controlar el inicio
 # del servidor así como la ejecución de la tarea periódica.
-pipenv run celery worker -A mascotas_celery --beat --concurrency=10 --loglevel=info
+pipenv run celery worker -A mascotas_celery --beat --loglevel=info --autoscale=20,10 #--concurrency=10 
