@@ -1,0 +1,26 @@
+## Contenedores y despliegue automático.
+
+#### Contenedor del primer microservicio.
+
+Contenedor: https://hub.docker.com/r/lidiasm/mascotas
+
+En primer lugar se debe decidir la imagen base sobre la que se va a construir el contenedor. Considerando que mi aplicación se desarrolla en *Python* y que se especifican las dependencias necesarias para su ejecución, según la [documentación de Python](https://pythonspeed.com/articles/base-image-python-docker-images/) lo más adecuado es utilizar alguna de las versiones especiales para este lenguaje, entre las cuales existen algunas bastante ligeras que contienen solo los paquetes imprescindibles. Con el objetivo de escoger el mejor sistema operativo para el contenedor de mi aplicación procedo a realizar un estudio de las diferentes versiones de *Python* así como de *Alpine* puesto que destaca por su ligereza. Para ello he utilizado [*ab*](https://httpd.apache.org/docs/2.4/programs/ab.html), con el que podré realizar diversas peticiones paralelas al servidor con las que comprobar el rendimiento particular de cada base. Este estudio se puede encontrar [aquí](https://github.com/lidiasm/ProyectoCC/blob/master/docs/estudio_dockers.md).
+
+Tal y como se ha podido observar en el estudio anterior, el sistema operativo base con una mejor relación tamaño-velocidad es **slim-stretch**, y por lo tanto será este el que utilice para construir el contenedor de este primer microservicio. Para esta tarea se ha redactado el fichero [Dockerfile](https://github.com/lidiasm/ProyectoCC/blob/master/Dockerfile) en el cual se detallan las instrucciones que se han llevado a cabo y su respectiva justificación.
+
+#### Despliegue y construcción automática en *Docker Hub*.
+
+Para realizar el despliegue en *Docker Hub* basta con crearse una cuenta en esta plataforma y un repositorio para subir el contenedor de este primer microservicio. Con el objetivo de construir automáticamente el contenedor a partir de la versión actualizada del fichero *dockerfile* que se encuentra en mi repositorio del proyecto he vinculado este último a *Docker Hub*. Para ello he seguido los pasos recopilados en la [documentación](https://docs.docker.com/docker-hub/builds/link-source/) de la plataforma en cuestión, los cuales consisten en vincular el repositorio de *GitHub* con *Docker Hub* y permitirle el acceso al mismo. A continuación se realiza la [configuración](https://docs.docker.com/docker-hub/builds/) necesaria para automatizar la construcción del contenedor. Para ello accedo a la pestaña *Build* desde el repositorio de *Docker Hub* con el fin de indicar dónde se encuentra el fichero *dockerfile* con el que se construirá el contenedor y activar la opción *Autobuild*, entre otros parámetros. Una vez se han configurado las reglas de construcción cada vez que realice un *push* al repositorio de *GitHub* del proyecto se construirá automáticamente el contenedor de este primer microservicio.
+
+Para ejecutar el contenedor basta con descargarlo desde *Docker Hub* con el comando `docker pull lidiasm/mascotas:obtener_mascotas
+` y ejecutar el comando `docker run -e PUERTO=<puerto host> -e API_KEY="tu api key de Petfinder" -e API_SECRET="tu api secret de Petfinder" -p <puerto host>:<puerto Gunicorn> -d lidiasm/mascotas:obtener_mascotas`, en el cual con la opción *-e* le proporcionamos las dos variables de entorno necesarias para conectar con la API Petfinder así como el puerto al que deberá conectarse *Gunicorn* siguiendo esta [documentación](https://vsupalov.com/docker-arg-vs-env/). La opción *-p* nos permite especificar los puertos por los que se van a enviar las peticiones y recibir los resultados, y por último, con la opción *-d* indicamos que el *docker* se ejecute en segundo plano para que no bloquee la consola.
+
+A continuación se puede comprobar en este [enlace](https://github.com/lidiasm/ProyectoCC/blob/master/docs/pruebas_rest.md) el funcionamiento de los diferentes servicios REST que se han definido para este primer microservicio.
+
+#### Despliegue en Heroku.
+
+Contenedor desplegado en Heroku: https://obtenermascotas.herokuapp.com/
+
+Para desplegar el microservicio en *Heroku* en primer lugar debemos darnos de alta en esta plataforma. A continuación definimos el fichero [heroku.yml](https://github.com/lidiasm/ProyectoCC/blob/master/heroku.yml), que se encuentra en el directorio raíz del repositorio asociado al proyecto, en el que se indica que el contenedor se construirá mediante el fichero *dockerfile*. Con el objetivo de realizar un despliegue del contenedor actualizado conectamos mi repositorio del proyecto de *GitHub* con *Heroku* para habilitar la **construcción y despliegue automático** siguiendo los pasos de la [documentación](https://devcenter.heroku.com/articles/github-integration#automatic-deploys) de esta última plataforma. Por último configuramos las tres variables de entorno necesarias para ejecutar mi aplicación: la API key, API secret y el puerto al que se conectará *Gunicorn*. En este último caso hay que tener en cuenta que *Heroku* transmite esta variable mediante el nombre `PORT`, por lo que la variable de entorno que se defina deberá nombrarse de esa forma.
+
+Si accedemos al contenedor desplegado podremos realizar todas las acciones que han sido descritas en la sección anterior.
