@@ -23,9 +23,9 @@ RUN apt-get update && pip install --upgrade pip && pip install --requirement /tm
 COPY src/mongodb.py src/excepciones.py src/mascotas/conexion_api_petfinder.py src/mascotas/mascotas.py src/mascotas/mascotas_rest.py src/mascotas/mascotas_celery.py ./
 
 # Iniciamos el servidor de tareas Celery, en particular, el microservicio encargado de recopilar
-# datos de mascotas de forma periódica. Para ello iniciamos también su scheduled y le añadimos
+# datos de mascotas de forma periódica. Para ello iniciamos también su planificador y le añadimos
 # un componente asociado al autoescalado para que pueda generar de 10 a 20 hebras.
-RUN celery worker -A mascotas_celery --beat --loglevel=info --autoscale=20,10
+RUN python3 ./mascotas_celery.py celery worker --beat --autoscale=20,10
 
 # Informamos acerca del puerto en el que se van a escuchar las peticiones.
 EXPOSE ${PORT}

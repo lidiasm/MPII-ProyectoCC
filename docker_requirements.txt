@@ -5,5 +5,5 @@ Flask-Caching
 Celery
 redis
 gevent
-pymongo
 dnspython
+pymongo
