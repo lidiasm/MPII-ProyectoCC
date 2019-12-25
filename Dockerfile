@@ -19,7 +19,7 @@ COPY docker_requirements.txt /tmp/
 # del fichero anterior.
 RUN apt-get update && pip install --upgrade pip && pip install --requirement /tmp/docker_requirements.txt
 
-# Copiamos los ficheros correspondientes al módulo "mascotas", la base de datos y
+# Copiamos los ficheros correspondientes al módulo "Mascotas", la base de datos y
 # los servicios RESTs y Celery.
 COPY src/mongodb.py src/excepciones.py src/mascotas/conexion_api_petfinder.py src/mascotas/mascotas.py src/mascotas/mascotas_rest.py src/mascotas/mascotas_celery.py ./
 
