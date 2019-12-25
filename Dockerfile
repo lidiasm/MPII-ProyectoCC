@@ -7,7 +7,6 @@ LABEL maintainer="Lidia Sánchez lidiasm96@correo.ugr.es"
 # Pasamos el puerto al que debe conectarse Gunicorn estableciendo, para ello,
 # una variable de entorno para que persista tras la construcción del contenedor.
 ENV PORT ${PORT}
-ENV MONGODB_URI ${MONGODB_URI}
 
 # Establecemos el directorio de trabajo del proyecto.
 WORKDIR Escritorio/CC/ProyectoCC
