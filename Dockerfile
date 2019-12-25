@@ -31,4 +31,4 @@ RUN python3 ./mascotas_celery.py celery worker --beat --autoscale=20,10
 EXPOSE ${PORT}
 
 # Ejecutamos el microservicio REST en diez copias del servidor Gunicorn de forma asíncrona.
-CMD gunicorn --worker-class=gevent --worker-connections=1000 --workers=10 -b 0.0.0.0:${PORT} mascotas_rest:app
+CMD gunicorn --workers=10 -b 0.0.0.0:${PORT} mascotas_rest:app
