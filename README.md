@@ -35,21 +35,17 @@ Los datos que se utilizarán en este proyecto se obtienen de la **API Petfinder*
 3. `make start` para iniciar el microservicio en *Celery* y en *Gunicorn*.
 4. `make stop` para finalizar la ejecución de los dos anteriores microservicios.
 
-[Más información acerca de las herramientas de construcción e integración.](https://github.com/lidiasm/ProyectoCC/blob/master/docs/herramientas_construccion_e_integracion.md)
-[Más información acerca de las arquitecturas de los microservicios y su ejecución.]()
-
 #### Contenedor del primer microservicio.
 
 Contenedor: https://hub.docker.com/r/lidiasm/mascotas
-Contenedor desplegado en Heroku: https://obtenermascotas.herokuapp.com/
 
-[Más información acerca del despliegue y construcción automática.](https://github.com/lidiasm/ProyectoCC/blob/master/docs/contenedores_y_despliegue.md)
+Contenedor desplegado en Heroku: https://obtenermascotas.herokuapp.com/
 
 #### Incorporación del almacén de datos.
 
 Tal y como se comentó anteriormente, se va a utilizar como almacén de datos **MongoDB** local, en particular haré uso de la biblioteca especial para esta base de datos escrita en *Python* denominada ***pymongo***. Para integrarla en mi proyecto utilizaré el mecanismo de *inyección de dependencias* de modo que se implemente una única clase específica en la que se desarrollen las diferentes operaciones que se pueden realizar en la base de datos, como añadir elementos, obtener uno en particular, entre otros. Posteriormente, se incluirá un atributo en cada una de las clases de la lógica de la aplicación, como es la clase *Mascotas* y de esa forma se le pasará a su constructor un argumento que será un objeto de la base de datos ya inicializado. De este modo inyectamos en cada clase de la lógica de la aplicación un objeto de la base de datos, de este modo proporcionamos cierta independencia entre la base de datos y las clases del proyecto.
 
-Para añadir el almacén de datos escogido de forma local, en primer lugar, deberemos instalar la biblioteca mencionada anteriormente y configurar tanto una base de datos como un usuario con el que acceder a ella mediante la *shell de mongo*. Una vez realizado este proceso ya podemos construir la variable de entorno *MONGODB_URI* necesaria para poder conectar a la base de datos que acabamos de crear y configurar. Esta variable es **imprescindible** para que el microservicio disponga de un almacén de datos.
+Para añadir el almacén de datos escogido de forma local, en primer lugar, deberemos instalar la biblioteca mencionada anteriormente y configurar tanto una base de datos como un usuario con el que acceder a ella mediante la *shell de mongo*. Una vez realizado este proceso ya podemos construir la variable de entorno `MONGODB_URI` necesaria para poder conectar a la base de datos que acabamos de crear y configurar. Esta variable es **imprescindible** para que el microservicio disponga de un almacén de datos.
 
 Los siguientes cambios que se han producido han consistido en añadir a *mongo* como servicio tanto en **Travis** como en **CircleCI**, en el que además se debe añadir una imagen adicional en la que esté instalada *MongoDB*. En mi caso he utilizado aquella que se encuentra disponible en la propia herramienta: `circleci/mongo:latest`. Del mismo modo, en ambos casos, se ha añadido como **variable de entorno encriptada la URI a la base de datos local** para poder realizar los tests de la clase en la que se encuentran las operaciones de esta.
 
