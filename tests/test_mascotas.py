@@ -12,7 +12,7 @@ import pytest
 sys.path.append("src/mascotas")
 import mascotas 
 sys.path.append("src")
-from excepciones import WrongPetIndex, MaxPetfinderRequestsExceeded
+from excepciones import WrongPetIndex, MaxPetfinderRequestsExceeded, WrongNumberSearchParameters, WrongSearchParametersValues
 sys.path.append("src")
 from mongodb import MongoDB
 """Creamos la conexión para la base de datos."""
@@ -71,3 +71,41 @@ def test_descargar_datos_mascotas_incorrecto():
             assert lista_mascotas.descargar_datos_mascotas()
     except MaxPetfinderRequestsExceeded:
         print("Número de peticiones máximo excedido.")
+
+def test_busqueda_incorrecto():
+    """Test 7: intento fallido de realizar una consulta por no pasar los términos
+        de búsqueda."""
+    with pytest.raises(WrongNumberSearchParameters):
+        assert lista_mascotas.buscar({})
+        
+def test_busqueda_incorrecto2():
+    """Test 8: intento fallido de realizar una consulta por parámetros de consulta
+        no válidos."""
+    with pytest.raises(WrongSearchParametersValues):
+        assert lista_mascotas.buscar({'tipo_animal':'', 'edad':'', 'genero':'',
+            'tamanio':'', 'ninios':'', 'gatos':'', 'perros':''})
+
+def test_busqueda_correcto():
+    """Test 9: búsqueda de mascotas satisfactoria."""
+    mascotas_coincidentes = lista_mascotas.buscar({'tipo_animal':'cat', 
+        'edad':'', 'genero':'', 'tamanio':'', 'ninios':'', 'gatos':'', 'perros':''})
+    assert type(mascotas_coincidentes) == dict
+    
+def test_comparar_variables_busqueda_incorrecto():
+    """Test 10: comprobación fallida por no ser dos variables del mismo tipo."""
+    with pytest.raises(TypeError):
+        assert lista_mascotas.comparar_variables_busqueda(True, "hola")
+
+def test_comparar_variables_busqueda_correcto():
+    """Test 11: comprobación de que si no existe valor para uno de los términos 
+        de búsqueda no se tenga en cuenta y no afecte, por tanto, a la consulta."""
+    assert lista_mascotas.comparar_variables_busqueda(True, "") == True
+    
+def test_comparar_variables_busqueda_correcto2():
+    """Test 12: comprobación de dos variables del mismo tipo pero con distinto
+        contenido. Deberá de devolver false."""
+    assert lista_mascotas.comparar_variables_busqueda("hola", "adiós") == False
+    
+def test_comparar_variables_busqueda_correcto3():
+    """Test 12: comprobación de dos variables del mismo tipo y con el mismo contenido."""
+    assert lista_mascotas.comparar_variables_busqueda("hola", "hola") == True

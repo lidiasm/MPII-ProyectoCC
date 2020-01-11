@@ -57,3 +57,41 @@ def test_obtener_una_mascota_incorrecto():
         assert (respuesta.status_code == 400)
     else:
         assert respuesta.status_code == 404
+
+def test_buscar_incorrecto():
+    """Test 4: intento fallido de realizar una consulta por no pasarle los argumentos
+        de la consulta"""
+    respuesta = app.get('/buscar_mascotas')
+    if (respuesta.status_code == 412):
+        """Número de peticiones máximo excedido."""
+        assert (respuesta.status_code == 412)
+    elif (respuesta.status_code == 428):
+        """No hay mascotas sobre las que realizar la búsqueda."""
+        assert (respuesta.status_code == 428)
+    else:
+        assert (respuesta.status_code == 400)
+        
+def test_buscar_incorrecto2():
+    """Test 5: intento fallido de realizar una consulta por pasarle los términos
+        de búsqueda vacíos."""
+    respuesta = app.get('/buscar_mascotas?tipo_animal=&edad=&genero=&tamanio=&ninios=&gatos=&perros=')
+    if (respuesta.status_code == 412):
+        """Número de peticiones máximo excedido."""
+        assert (respuesta.status_code == 412)
+    elif (respuesta.status_code == 428):
+        """No hay mascotas sobre las que realizar la búsqueda."""
+        assert (respuesta.status_code == 428)
+    else:
+        assert (respuesta.status_code == 400)
+        
+def test_buscar_correcto():
+    """Test 6: consulta de mascotas satisfactoria."""
+    respuesta = app.get('/buscar_mascotas?tipo_animal=cat&edad=&genero=&tamanio=&ninios=&gatos=&perros=')
+    if (respuesta.status_code == 412):
+        """Número de peticiones máximo excedido."""
+        assert (respuesta.status_code == 412)
+    elif (respuesta.status_code == 428):
+        """No hay mascotas sobre las que realizar la búsqueda."""
+        assert (respuesta.status_code == 428)
+    else:
+        assert (respuesta.status_code == 200 and respuesta.headers["Content-Type"] == "application/json")
