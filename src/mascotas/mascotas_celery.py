@@ -31,7 +31,7 @@ try:
 except:
     print("No se ha podido establecer la conexión con la API Petfinder aún.")
 
-@periodic_task(run_every=(crontab(hour='*/23')), name="descargar_mascotas")
+@periodic_task(run_every=(crontab(minute='*/60')), name="descargar_mascotas")
 def descargar_mascotas():
     """Descarga nuevos datos de viente mascotas siempre y cuando se haya realizado
     una conexión correcta con la API Petfinder."""
