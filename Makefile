@@ -10,7 +10,7 @@ test:
 	pipenv run python -m pytest tests/*
 	# Tests de covertura para todas las clases actuales.
 	pipenv run python -m pytest --cov=mascotas --cov=conexion_api_petfinder \
-		--cov=mascotas_celery --cov=mascotas_rest --cov=mongodb tests/
+		--cov=mascotas_celery --cov=mascotas_rest --cov=mongodb --cov=estadisticas tests/
 
 start:
 	# Iniciamos el servidor Gunicorn con los siguientes parámetros:
