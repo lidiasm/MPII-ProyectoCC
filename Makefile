@@ -10,9 +10,10 @@ test:
 	pipenv run python -m pytest tests/*
 	# Tests de covertura para todas las clases actuales.
 	pipenv run python -m pytest --cov=mascotas --cov=conexion_api_petfinder \
-		--cov=mascotas_celery --cov=mascotas_rest --cov=mongodb --cov=estadisticas tests/
+		--cov=mascotas_celery --cov=mascotas_rest --cov=mongodb --cov=estadisticas \
+		--cov=estadisticas_celery --cov=estadisticas_rest tests/
 
-start:
+start_mascotas:
 	# Iniciamos el servidor Gunicorn con los siguientes parámetros:
 	# 1. Mediante el parámetro "--chdir" cambiamos al directorio del módulo Mascotas
 	#		donde se encuentra el microservicio REST dedicado a visualizar los datos de estas.
@@ -39,14 +40,19 @@ start:
 	  --chdir src/mascotas/ mascotas_rest:app -p pid_gunicorn.pid -b :${PORT1} -D
 	# Ejecutamos este script para iniciar el servidor Celery, su scheduled así como el microservicio
 	# que contiene una tarea periódica consistente en descargar datos de mascotas cada 23 horas.
-	pipenv run bash run_celery.sh
+	pipenv run bash run_mascotas_celery.sh
+
+start_estadisticas:
+	# Iniciamos el microservicio REST asociado a las estadísticas en otro puerto.
+	pipenv run gunicorn --worker-class=gevent --worker-connections=1000 --workers=10 \
+	  --chdir src/estadisticas/ estadisticas_rest:app -p pid_gunicorn.pid -b :${PORT2} -D
+	# Ejecutamos el microservicio en Celery que genera las Estadísticas
+	pipenv run bash run_estadisticas_celery.sh
+
 stop:
-	# Fin de la ejecución del proceso asociado al servidor Gunicorn. Para ello se hará uso del comando
-	# kill, el cual solo necesita el identificador de un proceso para terminar su ejecución.
-	#	Como se comentaba anteriormente, este ID se encuentra en el fichero "pid_gunicorn.pid".
+	# Fin de la ejecución de los microservicios RESTs.
 	pipenv run kill `cat src/mascotas/pid_gunicorn.pid`
-	# Finalizamos todos los workers y hebras que se han generado del microservicio en Celery mediante
-	# el comando pkill enviando, para ello, la orden de finalizar los procesos denominados "celery worker".
+	pipenv run kill `cat src/estadisticas/pid_gunicorn.pid`
+	# Fin de los workers de Celery.
 	pipenv run pkill -9 -f 'celery worker'
-	# Finalizamos también el proceso que se encarga de ejecutar Celery mediante un script en bash.
 	pipenv run pkill -9 -f 'celery.sh'
