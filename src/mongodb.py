@@ -45,6 +45,24 @@ class MongoDB:
         if (elemento != None): elemento['_id'] = str(elemento['_id'])
         return elemento
     
+    def get_coleccion_especifica(self, clave, valor):
+        """Comprobamos la conexión a la base de datos."""
+        if (self.coleccion == None or self.cliente == None):
+            raise CollectionNotFound('No se ha realizado la conexión con la base de datos.')
+        """Devuelve un cursor para recorrer los registros devueltos."""
+        registros_coleccion = {}
+        indice_registro = 0
+        elementos = (self.coleccion).find({clave:valor})
+        for elemento in elementos:
+            """Convertimos el id asignado por mongo en una cadena para que el servicio
+                REST pueda devolver los datos en formato JSON."""
+            elemento['_id'] = str(elemento['_id'])
+            registros_coleccion[indice_registro] = elemento
+            indice_registro += 1
+
+        if (len(registros_coleccion) == 0): raise EmptyCollection('La colección actual está vacía')
+        return registros_coleccion
+    
     def get_coleccion(self):
         """Comprobamos la conexión a la base de datos."""
         if (self.coleccion == None or self.cliente == None):

@@ -6,13 +6,18 @@ de la clase Estadísticas.
 
 @author: Lidia Sánchez Mérida
 """
+import os
 import pytest
 import sys
 sys.path.append("src")
 from excepciones import PetsNotFound
 sys.path.append("src/estadisticas")
 import estadisticas
-estd = estadisticas.Estadisticas() 
+
+from mongodb import MongoDB
+"""Creamos la conexión para la base de datos."""
+bd = MongoDB(os.environ.get("MONGODB_URI"), 'PetfinderBD', 'estadisticas')
+estd = estadisticas.Estadisticas(bd)
 
 def test_generar_estadistica_ninios_incorrecto():
     """Test 1: intento fallido de generar el primer tipo de informe estadístico
@@ -89,13 +94,13 @@ def test_generar_estadistica_tipos_mascotas_incorrecto():
         assert estd.generar_estadistica_tipos_mascotas({})
         
 def test_generar_estadistica_tipos_mascotas_incorrecto2():
-    """Test 7: intento fallido de generar el tercer tipo de informe estadístico
+    """Test 8: intento fallido de generar el tercer tipo de informe estadístico
         por no pasarle como argumento un diccionario."""
     with pytest.raises(PetsNotFound):
         assert estd.generar_estadistica_tipos_mascotas("mascota")
         
 def test_generar_estadistica_tipos_mascotas_correcto():
-    """Test 8: generar el tercer tipo de informe acerca de las mascotas disponibles
+    """Test 9: generar el tercer tipo de informe acerca de las mascotas disponibles
         para la adopción así como su respectivo número de ejemplares."""
     mascota1 = {'id':'0', 'nombre':'Kira', 'tipo_animal':'cat', 'raza':'DNV',
                 'tamanio':'small', 'genero':'female', 'edad':'young', 'tipo_pelaje':'DNV',
@@ -115,3 +120,21 @@ def test_generar_estadistica_tipos_mascotas_correcto():
     mascotas = {'0':mascota1, '1':mascota2, '2':mascota3, '3':mascota4, '4':mascota5}
     estadistica = estd.generar_estadistica_tipos_mascotas(mascotas)
     assert type(estadistica) == dict
+    
+def test_obtener_estadistica_tipos_mascotas():
+    """Test 10: obtener el informe estadístico acerca de las diferentes mascotas
+        que se pueden adoptar de la base de datos."""
+    informe = estd.obtener_estadistica_tipos_mascotas()
+    assert type(informe) == dict
+    
+def test_obtener_estadistica_ninios():
+    """Test 11: obtener el informe estadístico acerca de la relación entre los
+        niños y las mascotas."""
+    informe = estd.obtener_estadistica_ninios()
+    assert type(informe) == dict
+    
+def test_obtener_estadistica_razas_perro():
+    """Test 12: obtener el informe estadístico acerca de cuán sociable es cada
+        raza de perro de la que haya datos."""
+    informe = estd.obtener_estadistica_razas_perro()
+    assert type(informe) == dict

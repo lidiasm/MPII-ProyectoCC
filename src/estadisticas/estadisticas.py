@@ -12,10 +12,17 @@ Tipos de estadísticas:
 """
 import sys
 sys.path.append("src")
-from excepciones import PetsNotFound
+sys.path.append("../")
+from excepciones import PetsNotFound, ItemNotFound
 import operator
+from datetime import datetime
 
 class Estadisticas:
+    
+    def __init__(self, mongodb):
+        """Constructor. En el se realiza la inyección de dependencias para instanciar
+            un objeto de la base de datos."""
+        self.mongodb = mongodb
     
     def generar_estadistica_tipos_mascotas(self, mascotas):
         """Método que genera un informe estadísico en formato JSON con los tipos
@@ -33,8 +40,19 @@ class Estadisticas:
             más amistoso con los niños en primer lugar."""
         estadistica_ordenada = dict( sorted(estadistica.items(), key=operator.itemgetter(1),reverse=True))
         
-        return estadistica_ordenada
+        """Insertamos la estadística generada."""
+        fecha = str(datetime.now().strftime("%d/%m/%Y %H:%M:%S.%f"))
+        informe = {'id':fecha, 'id_informe':'tipos_mascotas', 'informe':estadistica_ordenada}
+        self.mongodb.insertar_elemento(informe)
         
+        return estadistica_ordenada
+    
+    def obtener_estadistica_tipos_mascotas(self):
+        """Obtiene el informe estadístico acerca de los distintos tipos de mascotas
+            que se pueden adoptar y su número respectivo de ejemplares disponibles."""
+        informe = self.mongodb.get_coleccion_especifica('id_informe', 'tipos_mascotas')
+        if (informe == None): raise ItemNotFound("Aún no se ha generado este informe. Inténtelo más tarde.")
+        return informe
     
     def generar_estadistica_ninios(self, mascotas):
         """Método que genera un informe estadísico en formato JSON con el porcentaje
@@ -62,9 +80,24 @@ class Estadisticas:
         estadistica_ordenada = dict( sorted(estadistica.items(), key=operator.itemgetter(1),reverse=True))
         """Calculamos el porcentaje para cada tipo de mascota."""
         for mascota in total_mascotas:
-            estadistica_ordenada[mascota] = str((estadistica_ordenada[mascota] / total_mascotas[mascota])*100) + "%"
+            if (mascota not in estadistica_ordenada):
+                estadistica_ordenada[mascota] = "0%"
+            else:
+                estadistica_ordenada[mascota] = str((estadistica_ordenada[mascota] / total_mascotas[mascota])*100) + "%"
+        
+        """Insertamos la estadística generada."""
+        fecha = str(datetime.now().strftime("%d/%m/%Y %H:%M:%S.%f"))
+        informe = {'id':fecha, 'id_informe':'ninios', 'informe':estadistica_ordenada}
+        self.mongodb.insertar_elemento(informe)
         
         return estadistica_ordenada
+    
+    def obtener_estadistica_ninios(self):
+        """Obtiene el informe estadístico acerca de los niños y su relación con las
+            mascotas de la base de datos."""
+        informe = self.mongodb.get_coleccion_especifica('id_informe', 'ninios')
+        if (informe == None): raise ItemNotFound("Aún no se ha generado este informe. Inténtelo más tarde.")
+        return informe
     
     def generar_estadistica_razas_perro(self, mascotas):
         """Método que genera un informe estadísico en formato JSON con el porcentaje
@@ -95,5 +128,17 @@ class Estadisticas:
                 estadistica[raza] = {'ninios': str((n_ninios/total_razas[raza])*100) + "%",
                                      'gatos': str((n_gatos/total_razas[raza])*100) + "%",
                                      'perros': str((n_perros/total_razas[raza])*100) + "%"}
-                
+               
+        """Insertamos la estadística generada."""
+        fecha = str(datetime.now().strftime("%d/%m/%Y %H:%M:%S.%f"))
+        informe = {'id':fecha, 'id_informe':'razas_perro', 'informe':estadistica}
+        self.mongodb.insertar_elemento(informe)
+        
         return estadistica
+    
+    def obtener_estadistica_razas_perro(self):
+        """Obtiene el informe estadístico acerca de la capacidad de socializar de las diferentes
+            razas de perro."""
+        informe = self.mongodb.get_coleccion_especifica('id_informe', 'razas_perro')
+        if (informe == None): raise ItemNotFound("Aún no se ha generado este informe. Inténtelo más tarde.")
+        return informe
