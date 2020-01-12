@@ -105,7 +105,7 @@ def test_get_coleccion_especifica_correcto():
     assert type(informes) == dict
         
 def test_get_coleccion_correcto():
-    """Test 10: obtener la colección completa. Para ello añadiremos dos elementos."""
+    """Test 11: obtener la colección completa. Para ello añadiremos dos elementos."""
     nueva_mascota = {'id': '4', 'nombre': 'Simba', 'tipo_animal': 'cat', 
         'raza': 'angora', 'tamanio': 'small'
         , 'genero': 'male', 'edad': 'young',
@@ -121,13 +121,13 @@ def test_get_coleccion_correcto():
     assert type(conexionMascotas.get_coleccion()) == dict 
 
 def test_eliminar_elemento_correcto():
-    """Test 11: eliminar un elemento de la colección proporcionando, para ello,
+    """Test 12: eliminar un elemento de la colección proporcionando, para ello,
         su identificador."""
     resultado = conexionMascotas.eliminar_elemento('id', '0')
     assert resultado.acknowledged == True 
     
 def test_eliminar_elemento_incorrecto():
-    """Test 12: intento fallido de eliminar un elemento de la colección por 
+    """Test 13: intento fallido de eliminar un elemento de la colección por 
         especificar un identificador incorrecto."""
     with pytest.raises(ItemNotFound):
         conexionMascotas.eliminar_elemento('id', '-1')
