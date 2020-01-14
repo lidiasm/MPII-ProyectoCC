@@ -1,0 +1,6 @@
+- hosts: all
+  become: yes
+  roles:
+    - manala.make
+    - bihealth.python3
+    - common
