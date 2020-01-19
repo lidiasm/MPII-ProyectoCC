@@ -3,4 +3,5 @@
   roles:
     - manala.make
     - bihealth.python3
+    - geerlingguy.docker
     - common

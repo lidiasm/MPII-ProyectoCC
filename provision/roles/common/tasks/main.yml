@@ -1,6 +1,6 @@
 - name: Instala las herramientas comunes a los microservicios de la máquina virtual.
   apt:
-    pkg: ['git','python-setuptools','python3-pip']
+    pkg: ['git','python-setuptools','python3-pip', 'python3-docker']
     state: present
 - name: Obtener los ficheros fuentes del proyecto Petfinder.
   git:
@@ -12,3 +12,6 @@
     state: latest
     requirements: /home/lidia/ProyectoCC/requirements.txt
     executable: pip3
+- name: Obtener el contenedor de las mascotas.
+  docker_image:
+    name: lidiasm/mascotas:obtener_mascotas
