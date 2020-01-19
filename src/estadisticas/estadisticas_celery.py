@@ -21,12 +21,15 @@ sys.path.append("../mascotas")
 import mascotas
 from mongodb import MongoDB
 
-"""Creamos un objeto de la base de datos donde se almacenan las mascotas."""
-bdMascotas = MongoDB(os.environ.get("MONGODB_URI"), 'PetfinderBD', 'mascotas')
-"""Creamos un objeto de la clase Mascotas para obtener todas las mascotas de la base
-de datos y así generar las estadísticas, en lugar de conenectarnos con el microservicio
-Celery que descarga los datos. Así desacoplamos la obtención de datos del resto de microservicios."""
-m = mascotas.Mascotas(bdMascotas)
+try:
+    """Creamos un objeto de la base de datos donde se almacenan las mascotas."""
+    bdMascotas = MongoDB(os.environ.get("MONGODB_URI"), 'PetfinderBD', 'mascotas')
+    """Creamos un objeto de la clase Mascotas para obtener todas las mascotas de la base
+    de datos y así generar las estadísticas, en lugar de conenectarnos con el microservicio
+    Celery que descarga los datos. Así desacoplamos la obtención de datos del resto de microservicios."""
+    m = mascotas.Mascotas(bdMascotas)
+except:
+    print("No se ha podido establecer la conexión con la API Petfinder aún.")
 
 """Creamos un objeto de la clase Estadísticas para acceder a los métodos que generan
 los diferentes tipos de infomes"""
