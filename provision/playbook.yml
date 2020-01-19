@@ -1,5 +1,17 @@
 - hosts: all
   become: yes
+  #vars_files:
+  #  - vars/main.yml
+  tasks:
+    - name: Obtener el contenedor del microservicio de las mascotas.
+      docker_image:
+        name: lidiasm/mascotas:obtener_mascotas
+    - name: Obtener el contenedor del microservicio de las estadísticas.
+      docker_image:
+        name: lidiasm/mascotas:estadisticas
+  handlers:
+    - name: start mongodb
+      service: name=mongod state=started
   roles:
     - manala.make
     - bihealth.python3
