@@ -18,15 +18,14 @@ sys.path.append("src")
 from excepciones import MaxPetfinderRequestsExceeded 
 from mongodb import MongoDB
 
-"""Creamos un objeto de la base de datos y lo configuramos."""
-bd = MongoDB(os.environ.get("MONGODB_URI"), 'PetfinderBD', 'mascotas')
-
 """Creamos un objeto de la clase Mascotas cuyo constructor se encarga de inicializar
 la conexión con la API Petfinder.
 
 Este bloque try-except evita que la excepción impida construir el contenedor al
 iniciar celery durante su construcción."""
 try:
+    """Creamos un objeto de la base de datos y lo configuramos."""
+    bd = MongoDB(os.environ.get("MONGODB_URI"), 'PetfinderBD', 'mascotas')
     m = mascotas.Mascotas(bd)
 except:
     print("No se ha podido establecer la conexión con la API Petfinder aún.")
