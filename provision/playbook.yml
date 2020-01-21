@@ -1,19 +1,49 @@
 - hosts: all
   become: yes
-  #vars_files:
-  #  - vars/main.yml
   tasks:
-    - name: Obtener el contenedor del microservicio de las mascotas.
-      docker_image:
-        name: lidiasm/mascotas:obtener_mascotas
-    - name: Obtener el contenedor del microservicio de las estadísticas.
-      docker_image:
-        name: lidiasm/mascotas:estadisticas
+    #- name: Obtener el contenedor del microservicio de las mascotas.
+    #  docker_image:
+    #    name: lidiasm/mascotas:obtener_mascotas
+    #- name: Obtener el contenedor del microservicio de las estadísticas.
+    #  docker_image:
+    #    name: lidiasm/mascotas:estadisticas
+    - name: Incluimos las variables que vamos a utilizar.
+      include_vars: variables.yml
+    - name: Creamos un usuario administrador y su base de datos de administración.
+      mongodb_user:
+        login_port: "27017"
+        name: ADMIN_USER
+        password: ADMIN_PASSWORD
+        roles: "root"
+        database: "admin"
+        state: present
+    - name: Añadimos un nuevo usuario, mediante el administrador.
+      mongodb_user:
+        login_port: "27017"
+        login_user: ADMIN_USER
+        login_password: ADMIN_PASSWORD
+        name: PET_USER
+        password: PET_PASSWORD
+        database: "admin"
+        roles: dbAdmin
+        state: present
+    - name: Creamos la base de datos Petfinder como el usuario creado anteriormente.
+      mongodb_user:
+        login_port: "27017"
+        login_user: PET_USER
+        login_password: PET_PASSWORD
+        name: PET_USER
+        password: PET_PASSWORD
+        database: "Petfinder"
+        roles: dbAdmin
+        state: present
+  roles:
+  #  - manala.make
+  #  - bihealth.python3
+  #  - geerlingguy.docker
+  #  - enix.mongodb
+  #  - common
+  # - cowops.debian-mongodb
   handlers:
     - name: start mongodb
       service: name=mongod state=started
-  roles:
-    - manala.make
-    - bihealth.python3
-    - geerlingguy.docker
-    - common
