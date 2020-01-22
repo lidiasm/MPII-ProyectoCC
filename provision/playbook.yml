@@ -1,49 +1,64 @@
+# DOCUMENTACIÓN DEL USO DE DOCKERS EN PLAYBOOKS DE ANSIBLE: https://docs.ansible.com/ansible/latest/modules/docker_image_module.html
+# DOCUMENTACIÓN ACERCA DE CÓMO AÑADIR FICHEROS CON VARIABLES: https://docs.ansible.com/ansible/latest/modules/include_vars_module.html
+# DOCUMENTACIÓN ACERCA DE CÓMO EJECUTAR COMANDOS MEDIANTE SHELL: https://docs.ansible.com/ansible/latest/modules/shell_module.html
+# EJEMPLOS DE USO DEL MÓDULO SHELL PARA EJECUTAR ÓRDENES CON MONGODB Y CÓMO INICIAR EL SERVICIO: https://stackoverflow.com/questions/25562078/how-do-i-create-a-collection-in-mongodb-using-an-ansible-playbook
+#
+# Playbook general para instalar las herramientas necesarias para posteriormente
+# ejecutar los microservicios en la máquina. Lo realizamos para todas las máquinas
+# registradas en el fichero ansible_hosts, por ello no especificamos ninguna en concreto
+# en la siguiente orden.
 - hosts: all
+# Mediante esta especificación adquirimos permisos de superusuario que serán necesarios
+# para instalar todas las herramientas necesarias.
   become: yes
   tasks:
-    #- name: Obtener el contenedor del microservicio de las mascotas.
-    #  docker_image:
-    #    name: lidiasm/mascotas:obtener_mascotas
-    #- name: Obtener el contenedor del microservicio de las estadísticas.
-    #  docker_image:
-    #    name: lidiasm/mascotas:estadisticas
+    # Tras instalar docker en la máquina podremos descargarnos el contenedor desde
+    # Docker Hub para posteriormente poder iniciar el primer microservicio.
+    - name: Obtener el contenedor del microservicio de las mascotas.
+      docker_image:
+        name: lidiasm/mascotas:obtener_mascotas
+    # Del mismo modo descargamos también el contenedor de las estadísticas.
+    - name: Obtener el contenedor del microservicio de las estadísticas.
+      docker_image:
+        name: lidiasm/mascotas:estadisticas
+    # Incluimos un fichero en el que se almacenarán las variables que se utilizan
+    # tanto para el provisionamiento como para la ejecución de los microservicios.
+    # Aquellas que sean consideradas como sensibles se han encriptado utilizando
+    # "ansible-vault encrypt_string", el cual devuelve una secuencia de caracteres
+    # encriptada que representa el valor de la variable sensible. Se puede asociar
+    # a cada variable una contraseña distinta con la cual obtener el valor encriptado.
+    # Pero en mi caso, para simplificar el proceso, he utilizado la misma clave para
+    # encriptar todas las variables. Lo que me permite acceder a sus valores a través
+    # del modificador "--ask-vault-pass" durante la ejecución de este playbook.
     - name: Incluimos las variables que vamos a utilizar.
       include_vars: variables.yml
-    - name: Creamos un usuario administrador y su base de datos de administración.
-      mongodb_user:
-        login_port: "27017"
-        name: ADMIN_USER
-        password: ADMIN_PASSWORD
-        roles: "root"
-        database: "admin"
-        state: present
-    - name: Añadimos un nuevo usuario, mediante el administrador.
-      mongodb_user:
-        login_port: "27017"
-        login_user: ADMIN_USER
-        login_password: ADMIN_PASSWORD
-        name: PET_USER
-        password: PET_PASSWORD
-        database: "admin"
-        roles: dbAdmin
-        state: present
-    - name: Creamos la base de datos Petfinder como el usuario creado anteriormente.
-      mongodb_user:
-        login_port: "27017"
-        login_user: PET_USER
-        login_password: PET_PASSWORD
-        name: PET_USER
-        password: PET_PASSWORD
-        database: "Petfinder"
-        roles: dbAdmin
-        state: present
+    # Nos aseguramos que el servicio del almacén de datos escogido esté en ejecución.
+    - service: name=mongod state=started
+    # Con esta instrucción se crea tanto la base de datos Petfinder como la primera
+    # colección asociada a las mascotas. Si ya existen, no tiene efecto.
+    - shell: mongo {{BD}} --eval "db.createCollection('{{MASCOTAS_COLECCION}}')"
+    # Del mismo modo creamos para la misma base de datos anterior la colección de
+    # estadísticas. Si ya existen, este comando no tiene efecto.
+    - shell: mongo {{BD}} --eval "db.createCollection('{{ESTADISTICAS_COLECCION}}')"
+    # Creamos un usuario administrador para esta base de datos en concreto con el que
+    # posteriormente accederemos.
+    - name: Creamos un usuario para la base de datos Petfinder.
+      command: mongo {{BD}} --eval "db.createUser({user:'{{PET_USER}}', pwd:'{{PET_PASSWORD}}', roles:['dbAdmin']})"
   roles:
-  #  - manala.make
-  #  - bihealth.python3
-  #  - geerlingguy.docker
-  #  - enix.mongodb
-  #  - common
-  # - cowops.debian-mongodb
-  handlers:
-    - name: start mongodb
-      service: name=mongod state=started
+  # Utilizamos un rol de galaxy para poder instalar Python 3 ya que los microservicios
+  # se encuentran programados en este lenguaje.
+  # FUENTE: https://galaxy.ansible.com/bihealth/python3
+   - bihealth.python3
+  # Utilizamos otro rol de galaxy para poder instalar docker con el objetivo de
+  # posteriormente poder descargarnos los contenedores asociados a los dos microservicios del proyecto.
+  # FUENTE: https://galaxy.ansible.com/geerlingguy/docker
+   - geerlingguy.docker
+  # Utilizamos un tercer rol de galaxy para poder instalar MongoDB y así poder crear
+  # una base de datos local con las dos colecciones referentes a las mascotas y a las
+  # estadísticas, respectivamente.
+  # FUENTE: https://galaxy.ansible.com/enix/mongodb
+   - enix.mongodb
+  # Por último añado un rol común a todas las máquinas en el que se descargará
+  # el repositorio del proyecto desde git para poder instalar las dependencias
+  # específicas del proyecto utilizando el fichero "docker_requirements.txt".
+   - common

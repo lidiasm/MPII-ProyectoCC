@@ -1,15 +1,36 @@
+# DOCUMENTACIÓN SOBRE EL USO DE APT EN ANSIBLE: https://docs.ansible.com/ansible/latest/modules/apt_module.html
+# DOCUMENTACIÓN ACERCA DEL USO DE GIT EN ANSIBLE: https://docs.ansible.com/ansible/latest/modules/git_module.html
+# DOCUMENTACIÓN DEL USO DE PIP EN ANSIBLE: https://docs.ansible.com/ansible/latest/modules/pip_module.html
+#
+# Playbook que recopila las tareas comunes a todas las máquinas que se vayan
+# a provisionar puesto que contiene las órdenes para instalar las herramientas
+# necesarias para obtener el proyecto de la asignatura así como la instalación
+# de dependencias necesarias tanto para otras herramientas que vamos a utilizar
+# como específicas del propio proyecto.
+
+# Instala git para poder descargar el repositorio del proyecto. De él nos interesa
+# particularmente el fichero de dependencias "docker_requirements.txt" con el que posteriormente
+# instalaremos las librerías necesarias para ejecutar ambos microservicios.
+# También instalamos una librería necesaria para el correcto funcionamiento de Python
+# así como pip3 con el que instalaremos las dependencias específicas del proyecto.
+# Por último se instalará la librería de Python 3 asociada a docker para el
+# correcto funcionamiento de este último.
 - name: Instala las herramientas comunes a los microservicios de la máquina
         virtual así como git con el que descargaremos el repositorio de la asignatura.
   apt:
     pkg: ['git','python-setuptools','python3-pip', 'python3-docker']
     state: present
+# Clonamos el proyecto de la asignatura en la máquina virtual.
 - name: Obtener el repositorio con los ficheros fuentes del proyecto.
   git:
     repo: https://github.com/lidiasm/ProyectoCC.git
     clone: yes
     dest: ProyectoCC
+# Instalamos las librerías específicas del proyecto en cuestión utilizando, para ello,
+# el fichero "docker_requirements.txt", que contiene las dependencias esenciales para
+# ejecutar los contenedores.
 - name: Instalar las dependencias específicas del proyecto.
   pip:
     state: latest
-    requirements: /home/lidia/ProyectoCC/requirements.txt
+    requirements: /home/lidia/ProyectoCC/docker_requirements.txt
     executable: pip3

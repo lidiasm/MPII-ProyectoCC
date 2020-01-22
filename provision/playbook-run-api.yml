@@ -1,0 +1,34 @@
+# DOCUMENTACIÓN ACERCA DEL ARGUMENTO "--network" DE DOCKER: https://docs.docker.com/network/host/
+#
+# Playbook para la ejecución de los contenedores asociados a los microservicios
+# de las mascotas y las estadísticas.
+# De nuevo se establece la siguiente instrucción para que el microservicio pueda
+# ser iniciado por todas las máquinas.
+- hosts: all
+# Necesitaremos permisos de superusuario para poder ejecutar los microservicios.
+  become: yes
+  tasks:
+    # En primer lugar incluimos el fichero general que contiene las variables comunes
+    # a todos los playbook. Tal y como se explica en el fichero "playbook.yml", aquellas
+    # que contengan valores sensibles han sido encriptadas mediante ansible-vault.
+    # Para desencriptarlas de forma sencilla se ha establecido la misma contraseña para
+    # acceder a sus respectivos valores. Para desencriptarlas basta con añadir a la
+    # ejecución de este playbook el modificador "--ask-vault-pass" y seguidamente proporcionar la contraseña
+    # común establecida, en mi caso, para todas las variables.
+    # La documentación asociada a este procedimiento se encuentra en el fichero principal "playbook.yml".
+    - name: Incluimos las variables que vamos a utilizar.
+      include_vars: variables.yml
+    # Inicio de los dos contenedores de los microservicios de este proyecto
+    # pasándole como parámetros las variables de entorno que necesitará para establecer
+    # un puerto por el que escuche peticiones así como las credenciales para conectarse con
+    # la API de Petfinder, sin olvidar la dirección asociada a la base de datos local, que
+    # préviamente deberá estar creada.
+    # Añadimos la opción '--network="host"' para que se conecte a la base de datos local
+    # a la máquina virtual y que debe haber sido creada previamente a través del fichero
+    # de provisonamiento "playbook.yml".
+    # Cabe destacar que se proporcionan puertos diferentes para que cada microservicio escuche
+    # las peticiones de forma independiente al otro y así puedan ser ejecutados simultáneamente.
+    - name: Inicio del contenedor de las mascotas.
+      command: docker run -d -e PORT={{PORT1}} -e API_KEY={{API_KEY}} -e API_SECRET={{API_SECRET}} -e MONGODB_URI={{MONGODB_URI}} -p {{PORT1}}:{{PORT1}} --network="host" lidiasm/mascotas:obtener_mascotas
+    - name: Inicio del contenedor de las estadísticas.
+      command: docker run -d -e PORT={{PORT2}} -e API_KEY={{API_KEY}} -e API_SECRET={{API_SECRET}} -e MONGODB_URI={{MONGODB_URI}} -p {{PORT2}}:{{PORT2}} --network="host" lidiasm/mascotas:estadisticas

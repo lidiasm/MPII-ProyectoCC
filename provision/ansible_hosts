@@ -1,5 +1,10 @@
+# Inventario de máquinas virtuales.
+# Nombre de la máquina virtual: ubuntulidia
+# Puerto SSH con el que poder conectarse a dicha máquina: 22.
+# Claves SSH para poder realizar dicha conexión.
 [azure]
-ubuntu ansible_ssh_port=22 ansible_ssh_private_key_file=/home/lidia/.ssh/id_rsa
+ubuntulidia ansible_ssh_port=22 ansible_ssh_private_key_file=/home/lidia/.ssh/id_rsa
 
+# IP pública estática de la máquina virtual con Ubuntu LTS en Azure.
 [azure:vars]
 ansible_ssh_host=23.96.122.39
