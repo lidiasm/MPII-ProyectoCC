@@ -101,4 +101,6 @@ El proceso de provisionamiento se ha realizado mediante [Ansible](https://www.an
 
 #### Medidas de prestaciones.
 
+Prestaciones: tests.yml
+
 En esta sección se puede consultar el [estudio de prestaciones](https://github.com/lidiasm/ProyectoCC/blob/master/docs/estudio-prestaciones-azure.md) realizado para los diferentes tipos de máquinas que se han probado con el objetivo de obtener **1.000 peticiones/segundo en ambos microservicios**. Y tal y como se puede comprobar en el fichero documentado, el número máximo de peticiones conseguidas ha sido de **1.980 peticiones/segundo** medidas de forma local a la máquina en Azure.
